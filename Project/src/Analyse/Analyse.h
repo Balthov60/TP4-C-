@@ -12,6 +12,9 @@
 
 //--------------------------------------------------- Interfaces utilisées
 
+#include "../GraphVizWriter/GraphVizWriter.h"
+#include "../LogReader/LogReader.h"
+
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types

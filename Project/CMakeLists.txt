@@ -3,5 +3,5 @@ project(Project)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Project src/main.cpp src/Analyse/Analyse.h src/ArgumentParser/ArgumentParser.h src/Datetime/Datetime.h
-               src/GraphVizWriter/GraphVizWriter.h src/Hit/Hit.h src/LogReader/LogReader.h src/Request/Request.h)
+add_executable(Project src/main.cpp src/Analyse/Analyse src/ArgumentParser/ArgumentParser src/Datetime/Datetime
+               src/GraphVizWriter/GraphVizWriter src/Hit/Hit src/LogReader/LogReader src/Request/Request)

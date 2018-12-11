@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <GraphVizWriter> (fichier GraphVizWriter.h) ----------------
+//-- Interface de la classe <GraphVizWriter> (fichier GraphVizWriter.h) --
 #if ! defined ( GraphVizWriter_H )
 #define GraphVizWriter_H
 
@@ -39,12 +39,7 @@ public:
 
 //-------------------------------------------- Constructeurs - destructeur
 
-private:
-    GraphVizWriter ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+    GraphVizWriter() = delete;
 
 //------------------------------------------------------------------ PRIVE
 
@@ -55,7 +50,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <GraphVizWriter>
+//--------------------- Autres définitions dépendantes de <GraphVizWriter>
 
 #endif // GraphVizWriter_H
 

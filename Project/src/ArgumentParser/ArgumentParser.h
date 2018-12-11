@@ -6,13 +6,14 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <ArgumentParser> (fichier ArgumentParser.h) ----------------
+// Interface de la classe <ArgumentParser> (fichier ArgumentParser.h)
 #if ! defined ( ArgumentParser_H )
 #define ArgumentParser_H
 
 //--------------------------------------------------- Interfaces utilisées
 
 #include "../LogReader/LogReader.h"
+#include "../Analyse/Analyse.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -20,7 +21,8 @@
 
 //------------------------------------------------------------------------
 // Rôle de la classe <ArgumentParser>
-//
+
+// Parse la commande en entrée et crée l'instance d'Analyse associé
 //
 //------------------------------------------------------------------------
 
@@ -36,18 +38,15 @@ public:
     // Contrat :
     //
 
-
-//------------------------------------------------- Surcharge d'opérateurs
-
-//-------------------------------------------- Constructeurs - destructeur
-
-private:
-
-    ArgumentParser ( );
+    static bool Parse(int argc, char * Argv[], Analyse & Analyse);
     // Mode d'emploi :
     //
     // Contrat :
     //
+
+//-------------------------------------------- Constructeurs - destructeur
+
+    ArgumentParser() = delete;
 
 //------------------------------------------------------------------ PRIVE
 
@@ -58,7 +57,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <ArgumentParser>
+//--------------------- Autres définitions dépendantes de <ArgumentParser>
 
 #endif // ArgumentParser_H
 

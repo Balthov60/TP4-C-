@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <LogReader> (fichier LogReader.h) ----------------
+//---- Interface de la classe <LogReader> (fichier LogReader.h) ----------
 #if ! defined ( LogReader_H )
 #define LogReader_H
 
@@ -68,7 +68,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <LogReader>
+//-------------------------- Autres définitions dépendantes de <LogReader>
 
 #endif // LogReader_H
 

@@ -6,69 +6,30 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <ArgumentParser> (fichier ArgumentParser.cpp) ------------
+// Réalisation de la classe <ArgumentParser> (fichier ArgumentParser.cpp)
 
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
 #include "ArgumentParser.h"
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type ArgumentParser::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
-
-//------------------------------------------------- Surcharge d'opérateurs
-ArgumentParser & ArgumentParser::operator = ( const ArgumentParser & unArgumentParser )
-// Algorithme :
-//
+bool ArgumentParser::Parse(int argc, char **Argv, Analyse &Analyse)
 {
-} //----- Fin de operator =
-
+    return false;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
-ArgumentParser::ArgumentParser ( const ArgumentParser & unArgumentParser )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <ArgumentParser>" << endl;
-#endif
-} //----- Fin de ArgumentParser (constructeur de copie)
-
-
-ArgumentParser::ArgumentParser ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <ArgumentParser>" << endl;
-#endif
-} //----- Fin de ArgumentParser
-
-
-ArgumentParser::~ArgumentParser ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <ArgumentParser>" << endl;
-#endif
-} //----- Fin de ~ArgumentParser
-
 
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
-

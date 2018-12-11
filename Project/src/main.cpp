@@ -3,7 +3,11 @@
 #include "ArgumentParser/ArgumentParser.h"
 #include "Analyse/Analyse.h"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
+int main(int argc, char *argv[])
+{
+    Analyse analyse;
+
+    if (ArgumentParser::Parse(argc, argv, analyse));
+
     return 0;
 }

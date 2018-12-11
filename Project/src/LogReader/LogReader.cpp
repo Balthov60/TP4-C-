@@ -6,17 +6,17 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <LogReader> (fichier LogReader.cpp) ------------
+//---- Réalisation de la classe <LogReader> (fichier LogReader.cpp) ------
 
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-using namespace std;
 #include <iostream>
 
 //------------------------------------------------------ Include personnel
 #include "LogReader.h"
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
@@ -28,25 +28,9 @@ using namespace std;
 //{
 //} //----- Fin de Méthode
 
-
 //------------------------------------------------- Surcharge d'opérateurs
-LogReader & LogReader::operator = ( const LogReader & unLogReader )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
 
 //-------------------------------------------- Constructeurs - destructeur
-LogReader::LogReader ( const LogReader & unLogReader )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <LogReader>" << endl;
-#endif
-} //----- Fin de LogReader (constructeur de copie)
-
 
 LogReader::LogReader ( )
 // Algorithme :
@@ -65,7 +49,15 @@ LogReader::~LogReader ( )
 #ifdef MAP
     cout << "Appel au destructeur de <LogReader>" << endl;
 #endif
-} //----- Fin de ~LogReader
+}
+
+LogReader *LogReader::GetInstance() {
+    if (!instance)
+        instance = new LogReader;
+
+    return instance;
+}
+//----- Fin de ~LogReader
 
 
 //------------------------------------------------------------------ PRIVE

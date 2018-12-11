@@ -38,27 +38,12 @@ public:
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    ArgumentParser & operator = ( const ArgumentParser & unArgumentParser );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    ArgumentParser ( const ArgumentParser & unArgumentParser );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
+
+private:
 
     ArgumentParser ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~ArgumentParser ( );
     // Mode d'emploi :
     //
     // Contrat :

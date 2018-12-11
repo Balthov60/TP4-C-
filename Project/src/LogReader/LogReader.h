@@ -36,28 +36,21 @@ public:
     // Contrat :
     //
 
+    LogReader * GetInstance();
+
 
 //------------------------------------------------- Surcharge d'opérateurs
-    LogReader & operator = ( const LogReader & unLogReader );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    LogReader ( const LogReader & unLogReader );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
+private:
     LogReader ( );
     // Mode d'emploi :
     //
     // Contrat :
     //
 
+public:
     virtual ~LogReader ( );
     // Mode d'emploi :
     //
@@ -70,6 +63,8 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+
+    LogReader * instance;
 
 };
 

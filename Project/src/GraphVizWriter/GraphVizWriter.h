@@ -36,27 +36,11 @@ public:
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    GraphVizWriter & operator = ( const GraphVizWriter & unGraphVizWriter );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    GraphVizWriter ( const GraphVizWriter & unGraphVizWriter );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
+private:
     GraphVizWriter ( );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~GraphVizWriter ( );
     // Mode d'emploi :
     //
     // Contrat :

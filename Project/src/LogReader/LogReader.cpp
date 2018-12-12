@@ -32,7 +32,7 @@ LogReader *LogReader::GetInstance()
     return instance;
 }
 
-Hit * LogReader::readnext()
+Hit * LogReader::readNext()
 // Algorithme :
 //
 {

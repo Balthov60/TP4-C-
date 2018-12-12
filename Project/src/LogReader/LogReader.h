@@ -40,7 +40,7 @@ public:
     // Contrat:
     //
 
-    Hit * readnext();
+    Hit * readNext();
     // Mode d'emploi :
     //
     // Contrat:
@@ -63,7 +63,7 @@ public:
 //-------------------------------------------- Constructeurs - destructeur
 
 private:
-    LogReader ( );
+    LogReader ();
     // Mode d'emploi :
     //
     // Contrat :

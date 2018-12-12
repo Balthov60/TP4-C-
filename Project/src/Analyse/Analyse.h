@@ -14,6 +14,12 @@
 
 #include "../GraphVizWriter/GraphVizWriter.h"
 #include "../LogReader/LogReader.h"
+#include <string>
+#include <unordered_map>
+#include <map>
+#include <utility>
+
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -31,28 +37,13 @@ class Analyse
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Analyse & operator = ( const Analyse & unAnalyse );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Analyse ( const Analyse & unAnalyse );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
     Analyse ( );
     // Mode d'emploi :
     //
@@ -71,7 +62,15 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    string file;
+    string graph;
+    int hour;
+    bool excludeResourcesFile;
+    bool generateGraph;
 
+    //unordered_map<pair<string,string>,unsigned int> graphMapper;
+    unordered_map<string,unsigned int> nodeCounterMap;
+    multimap<unsigned int, string *> orderedNodeCounterMap;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

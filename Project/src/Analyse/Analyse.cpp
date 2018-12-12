@@ -22,33 +22,14 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Analyse::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-Analyse & Analyse::operator = ( const Analyse & unAnalyse )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
 
 //-------------------------------------------- Constructeurs - destructeur
-Analyse::Analyse ( const Analyse & unAnalyse )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Analyse>" << endl;
-#endif
-} //----- Fin de Analyse (constructeur de copie)
 
-
-Analyse::Analyse ( )
+Analyse::Analyse ( ):hour(-1),excludeResourcesFile(false),generateGraph(false)
 // Algorithme :
 //
 {

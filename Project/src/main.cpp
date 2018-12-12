@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         i++;
     }
 
-    cout << i << endl;
+    cout << "End " << i << endl;
     delete logReader;
 
     return 0;

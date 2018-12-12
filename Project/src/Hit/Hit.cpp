@@ -37,10 +37,10 @@ istream & operator>>(istream & is, Hit & hit)
     is >> hit.request;
 
     getline(is, temp, BASIC_SEPARATOR);
-    hit.statusCode = (unsigned int) stoi(temp, nullptr, 10);
+    // hit.statusCode = (unsigned int) stoi(temp, nullptr, 10);
 
     getline(is, temp, BASIC_SEPARATOR);
-    hit.dataQty = (unsigned int) stoi(temp, nullptr, 10);
+    // hit.dataQty = (unsigned int) stoi(temp, nullptr, 10);
 
     is.seekg(1, ios_base::cur);
     getline(is, hit.referer, LONG_STRING_SEPARATOR);

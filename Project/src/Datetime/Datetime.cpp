@@ -37,6 +37,7 @@ istream & operator>>(istream & is, Datetime & datetime)
     is.seekg(1, ios_base::cur);                 // Escape First Start Indicator
 
     getline(is, temp, DATE_SEPARATOR);
+    cout << temp << endl;
     datetime.day = (unsigned short) stoul(temp, nullptr,10);
 
     getline(is, temp, DATE_SEPARATOR);

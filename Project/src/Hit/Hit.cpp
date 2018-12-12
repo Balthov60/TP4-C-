@@ -19,29 +19,46 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
+const char SEP_SPACE = ' ';
+const char SEP_QUOTE = '"';
+
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Hit::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
 
 //------------------------------------------------- Surcharge d'opérateurs
+istream & operator >> (istream & is, Hit & hit){
+    int monInt;
 
+    string strStatusCode,strDataQty;
+
+    getline(is, hit.ip, SEP_SPACE);
+    getline(is, hit.logname, SEP_SPACE);
+    getline(is, hit.authenticatedUser, SEP_SPACE);
+
+
+    is >> hit.datetime;
+    is >> hit.request;
+    is.seekg(1,ios_base::cur);
+
+    getline(is, strStatusCode,SEP_SPACE);
+    getline(is, strDataQty, SEP_SPACE);
+    is.seekg(1,ios_base::cur);
+    getline(is, hit.referer, SEP_QUOTE);
+
+    is.seekg(2,ios_base::cur);
+    getline(is, hit.browserInfo, SEP_QUOTE);
+
+    hit.statusCode = stoul(strStatusCode,nullptr,10);
+    hit.dataQty = stoul(strDataQty,nullptr,10);
+
+    if (!is.eof())
+        is.seekg(1,ios_base::cur);
+
+    return is;
+}
 
 //-------------------------------------------- Constructeurs - destructeur
-Hit::Hit ( const Hit & unHit )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Hit>" << endl;
-#endif
-} //----- Fin de Hit (constructeur de copie)
-
 
 Hit::Hit ( )
 // Algorithme :

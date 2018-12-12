@@ -13,6 +13,9 @@
 //--------------------------------------------------- Interfaces utilisées
 
 #include "../Hit/Hit.h"
+#include <fstream>
+
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -30,14 +33,30 @@ class LogReader
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
     LogReader * GetInstance();
+    // Mode d'emploi :
+    //
+    // Contrat:
+    //
 
+    Hit * readnext();
+    // Mode d'emploi :
+    //
+    // Contrat:
+    //
+
+    bool TrackNewFile(const string & path);
+    // Mode d'emploi :
+    //
+    // Contrat:
+    //
+
+    void CloseFileStream();
+    // Mode d'emploi :
+    //
+    // Contrat:
+    //
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -63,7 +82,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-
+    ifstream stream;
     LogReader * instance;
 
 };

@@ -10,8 +10,12 @@
 #if ! defined ( Request_H )
 #define Request_H
 
-//--------------------------------------------------- Interfaces utilisées
 
+//--------------------------------------------------- Interfaces utilisées
+#include <string>
+#include <iostream>
+
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -28,28 +32,13 @@ class Request
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Request & operator = ( const Request & unRequest );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
+    friend istream & operator >> (istream & is, Request & request);
 
 //-------------------------------------------- Constructeurs - destructeur
-    Request ( const Request & unRequest );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
     Request ( );
     // Mode d'emploi :
     //
@@ -68,7 +57,9 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-
+    string type;
+    string url;
+    string protocol;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Request>

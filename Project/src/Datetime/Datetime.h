@@ -11,9 +11,13 @@
 #define Datetime_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <string>
+#include <iostream>
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
+const unsigned short int NB_CHAR_MONTH = 3;
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
@@ -28,27 +32,12 @@ class Datetime
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Datetime & operator = ( const Datetime & unDatetime );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+friend istream & operator >> (istream & is, Datetime & datetime);
 
 //-------------------------------------------- Constructeurs - destructeur
-    Datetime ( const Datetime & unDatetime );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
 
     Datetime ( );
     // Mode d'emploi :
@@ -68,6 +57,13 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    unsigned short int day;
+    char month[NB_CHAR_MONTH+1];
+    unsigned short int year;
+    unsigned short int hour;
+    unsigned short int minutes;
+    unsigned short int secondes;
+    string utc;
 
 };
 

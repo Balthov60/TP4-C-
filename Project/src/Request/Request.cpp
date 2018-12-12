@@ -18,35 +18,33 @@
 
 using namespace std;
 //------------------------------------------------------------- Constantes
-
+const char SEP_SPACE = ' ';
+const char SEP_QUOTE = '"';
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Request::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-Request & Request::operator = ( const Request & unRequest )
-// Algorithme :
+istream & operator >> (istream & is, Request & request)
+//Algorithme :
 //
 {
-} //----- Fin de operator =
+    is.seekg(2,ios_base::cur);
+    getline(is,request.type,SEP_SPACE);
+    getline(is,request.url,SEP_SPACE);
+    getline(is,request.protocol,SEP_QUOTE);
+
+    /*cout << request.type << endl;
+    cout << request.url << endl;
+    cout << request.protocol << endl;*/
+
+}
+
 
 
 //-------------------------------------------- Constructeurs - destructeur
-Request::Request ( const Request & unRequest )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Request>" << endl;
-#endif
-} //----- Fin de Request (constructeur de copie)
-
 
 Request::Request ( )
 // Algorithme :

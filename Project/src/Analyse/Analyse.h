@@ -24,6 +24,14 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+struct pairhash {
+public:
+    template <typename T, typename U>
+    size_t operator()(const pair<T, U> &x) const
+    {
+        return hash<T>()(x.first) ^ hash<U>()(x.second);
+    }
+};
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
@@ -37,6 +45,32 @@ class Analyse
 
 public:
 //----------------------------------------------------- Méthodes publiques
+    void Run();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void setFile(const string & filePath)
+    {
+        file = filePath;
+    }
+
+    void setGraph(const string & graphPath)
+    {
+        generateGraph = true;
+        graph = graphPath;
+    }
+
+    void setHour(int aHour)
+    {
+        hour = aHour;
+    }
+
+    void setExcludeResourcesFile(bool excludeResources)
+    {
+        excludeResourcesFile = excludeResources;
+    }
 
 
 
@@ -44,7 +78,7 @@ public:
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Analyse ( );
+    Analyse ();
     // Mode d'emploi :
     //
     // Contrat :
@@ -61,6 +95,31 @@ public:
 protected:
 //----------------------------------------------------- Méthodes protégées
 
+    bool analyseNextLog(LogReader & logReader);
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void generateOrderedNodeCounterMap();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void generateGraphMapper();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void displayResult();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
 //----------------------------------------------------- Attributs protégés
     string file;
     string graph;
@@ -68,7 +127,7 @@ protected:
     bool excludeResourcesFile;
     bool generateGraph;
 
-    //unordered_map<pair<string,string>,unsigned int> graphMapper;
+    unordered_map<pair<string,string>,unsigned int,pairhash> graphMapper;
     unordered_map<string,unsigned int> nodeCounterMap;
     multimap<unsigned int, string *> orderedNodeCounterMap;
 };

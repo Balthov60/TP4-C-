@@ -23,6 +23,13 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
+void Analyse::Run()
+//Algorithme :
+//
+{
+    LogReader * logReader = LogReader::GetInstance();
+    while(analyseNextLog(*logReader));
+}
 
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -50,6 +57,40 @@ Analyse::~Analyse ( )
 
 
 //------------------------------------------------------------------ PRIVE
-
 //----------------------------------------------------- Méthodes protégées
+bool Analyse::analyseNextLog(LogReader & logReader)
+//Algorithme :
+//
+{
+    Hit * hitPtr;
+    hitPtr = logReader.readNext();
 
+    if (hitPtr)
+    {
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Analyse::generateOrderedNodeCounterMap()
+//Algorithme :
+//
+{
+
+}
+
+void Analyse::generateGraphMapper()
+//Algorithme :
+//
+{
+
+}
+
+void Analyse::displayResult()
+//Algorithme :
+//
+{
+
+}

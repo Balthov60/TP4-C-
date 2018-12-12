@@ -40,6 +40,7 @@ istream & operator >> (istream & is, Request & request)
     cout << request.url << endl;
     cout << request.protocol << endl;*/
 
+    return is;
 }
 
 

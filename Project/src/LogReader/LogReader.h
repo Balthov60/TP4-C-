@@ -34,7 +34,7 @@ class LogReader
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    LogReader * GetInstance();
+    static LogReader * GetInstance();
     // Mode d'emploi :
     //
     // Contrat:
@@ -83,7 +83,7 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
     ifstream stream;
-    LogReader * instance;
+    static LogReader * instance;
 
 };
 

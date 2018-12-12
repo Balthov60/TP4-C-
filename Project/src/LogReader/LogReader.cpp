@@ -83,6 +83,7 @@ LogReader::LogReader ( )
 #ifdef MAP
     cout << "Appel au constructeur de <LogReader>" << endl;
 #endif
+    delete instance;
 } //----- Fin de LogReader
 
 

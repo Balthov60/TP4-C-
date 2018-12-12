@@ -30,11 +30,6 @@ using namespace std;
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-Hit & Hit::operator = ( const Hit & unHit )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
 
 
 //-------------------------------------------- Constructeurs - destructeur

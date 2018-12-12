@@ -9,11 +9,12 @@
 //---------- Interface de la classe <Hit> (fichier Hit.h) ----------------
 #if ! defined ( Hit_H )
 #define Hit_H
-
+using namespace std;
 //--------------------------------------------------- Interfaces utilisées
 
 #include "../Datetime/Datetime.h"
 #include "../Request/Request.h"
+#include <string>
 
 //------------------------------------------------------------- Constantes
 
@@ -31,19 +32,11 @@ class Hit
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Hit & operator = ( const Hit & unHit );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
+
+    friend istream & operator << (istream & is, Hit & hit);
 
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -71,7 +64,13 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-
+    string ip;
+    string logname;
+    string authenticatedUser;
+    unsigned int statusCode;
+    unsigned int dataQty;
+    string referer;
+    string browserInfo;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Hit>

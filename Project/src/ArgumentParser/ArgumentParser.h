@@ -11,10 +11,10 @@
 #define ArgumentParser_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <regex>
 
 #include "../LogReader/LogReader.h"
 #include "../Analyse/Analyse.h"
-
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -38,7 +38,7 @@ public:
     // Contrat :
     //
 
-    static bool Parse(int argc, char * Argv[], Analyse & Analyse);
+    static bool Parse(string command, Analyse & analyse);
     // Mode d'emploi :
     //
     // Contrat :
@@ -54,6 +54,10 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    static const regex commandRegex;
+    static const regex graphPathArgRegex;
+    static const regex timeArgRegex;
+    static const regex logPathArgRegex;
 
 };
 

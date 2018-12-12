@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <Datetime> (fichier Datetime.cpp) ------------
+//---- Réalisation de la classe <Datetime> (fichier Datetime.cpp) --------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -18,76 +18,46 @@
 
 using namespace std;
 //------------------------------------------------------------- Constantes
-const char SEP_SLASH='/';
-const char SEP_COL = ':';
-const char SEP_SPACE = ' ';
-const char SEP_BRACKR = ']';
+
+const char DATE_SEPARATOR = '/';
+const char TIME_SEPARATOR = ':';
+const char BASIC_SEPARATOR = ' ';
+const char END_INDICATOR = ']';
+
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
-
 //------------------------------------------------- Surcharge d'opérateurs
 
-istream & operator >> (istream & is, Datetime & datetime)
-//Algorithme :
-//
+istream & operator>>(istream & is, Datetime & datetime)
 {
-    unsigned int i;
-    string temporary;
+    string temp;
 
-    is.seekg(1, ios_base::cur);
-    getline(is, temporary, SEP_SLASH);
-    datetime.day = stoul(temporary, nullptr,10);
+    is.seekg(1, ios_base::cur);                 // Escape First Start Indicator
 
-    getline(is, temporary, SEP_SLASH);
-    sprintf(datetime.month, "%.4s", temporary.c_str());
+    getline(is, temp, DATE_SEPARATOR);
+    datetime.day = (unsigned short) stoul(temp, nullptr,10);
 
-    getline(is, temporary, SEP_COL);
-    datetime.year = stoul(temporary, nullptr,10);
+    getline(is, temp, DATE_SEPARATOR);
+    sprintf(datetime.month, "%.4s", temp.c_str());
 
-    getline(is,temporary, SEP_COL);
-    datetime.hour = stoul(temporary, nullptr,10);
+    getline(is, temp, TIME_SEPARATOR);
+    datetime.year = (unsigned short) stoul(temp, nullptr,10);
 
-    getline(is, temporary, SEP_COL);
-    datetime.minutes = stoul(temporary, nullptr, 10);
+    getline(is,temp, TIME_SEPARATOR);
+    datetime.hour = (unsigned short) stoul(temp, nullptr,10);
 
-    getline(is,temporary,SEP_SPACE);
-    datetime.secondes = stoul(temporary, nullptr, 10);
+    getline(is, temp, TIME_SEPARATOR);
+    datetime.minutes = (unsigned short) stoul(temp, nullptr, 10);
 
-    getline(is, datetime.utc,SEP_BRACKR);
+    getline(is, temp ,BASIC_SEPARATOR);
+    datetime.seconds = (unsigned short) stoul(temp, nullptr, 10);
 
-    /*cout << datetime.day << endl;
-    cout << datetime.month << endl;
-    cout << datetime.year  << endl;
-    cout << datetime.hour << endl;
-    cout << datetime.minutes << endl;
-    cout << datetime.secondes << endl;
-    cout << datetime.utc << endl;*/
+    getline(is, datetime.utc, END_INDICATOR);
 
     return is;
 }
-
-//-------------------------------------------- Constructeurs - destructeur
-Datetime::Datetime ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <Datetime>" << endl;
-#endif
-} //----- Fin de Datetime
-
-
-Datetime::~Datetime ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <Datetime>" << endl;
-#endif
-} //----- Fin de ~Datetime
-
 
 //------------------------------------------------------------------ PRIVE
 

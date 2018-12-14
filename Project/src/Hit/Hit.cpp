@@ -19,68 +19,46 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const char SEP_SPACE = ' ';
-const char SEP_QUOTE = '"';
+const char BASIC_SEPARATOR = ' ';
+const char LONG_STRING_SEPARATOR = '"';
 
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-
 //------------------------------------------------- Surcharge d'opérateurs
-istream & operator >> (istream & is, Hit & hit){
-    int monInt;
+istream & operator>>(istream & is, Hit & hit)
+{
+    string temp;
 
-    string strStatusCode,strDataQty;
-
-    getline(is, hit.ip, SEP_SPACE);
-    getline(is, hit.logname, SEP_SPACE);
-    getline(is, hit.authenticatedUser, SEP_SPACE);
-
+    getline(is, hit.ip, BASIC_SEPARATOR);
+    getline(is, hit.logname, BASIC_SEPARATOR);
+    getline(is, hit.authenticatedUser, BASIC_SEPARATOR);
 
     is >> hit.datetime;
     is >> hit.request;
-    is.seekg(1,ios_base::cur);
 
-    getline(is, strStatusCode,SEP_SPACE);
-    getline(is, strDataQty, SEP_SPACE);
-    is.seekg(1,ios_base::cur);
-    getline(is, hit.referer, SEP_QUOTE);
+    getline(is, temp, BASIC_SEPARATOR);
+    hit.statusCode = (unsigned int) stoi(temp, nullptr, 10);
 
-    is.seekg(2,ios_base::cur);
-    getline(is, hit.browserInfo, SEP_QUOTE);
+    getline(is, temp, BASIC_SEPARATOR);
+    if (temp.c_str()[0] == '-')         //sometimes, field data quantity has '-' char
+    {                                   //thus it's necessary to test it manually to avoid stoi errors
+        hit.dataQty = 0;
+    } else {
+        hit.dataQty = (unsigned int) stoi(temp, nullptr, 10);
+    }
 
-    hit.statusCode = stoul(strStatusCode,nullptr,10);
-    hit.dataQty = stoul(strDataQty,nullptr,10);
+    is.seekg(1, ios_base::cur);
+    getline(is, hit.referer, LONG_STRING_SEPARATOR);
 
-    if (!is.eof())
-        is.seekg(1,ios_base::cur);
+    is.seekg(2, ios_base::cur);
+    getline(is, hit.browserInfo, LONG_STRING_SEPARATOR);
+
+    //getline(is, temp);  // Remove end of file indicator (use of this line generates an error at the end of anonyme.log)
+    //TODO : find a better fix to EOF problem.
+    is.seekg(1, ios_base::cur);
+    if (is.get() != -1)
+        is.seekg(-1,ios_base::cur);
+
 
     return is;
 }
-
-//-------------------------------------------- Constructeurs - destructeur
-
-Hit::Hit ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <Hit>" << endl;
-#endif
-} //----- Fin de Hit
-
-
-Hit::~Hit ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <Hit>" << endl;
-#endif
-} //----- Fin de ~Hit
-
-
-//------------------------------------------------------------------ PRIVE
-
-//----------------------------------------------------- Méthodes protégées
-

@@ -6,10 +6,9 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Request> (fichier Request.h) ----------------
+//------- Interface de la classe <Request> (fichier Request.h) -----------
 #if ! defined ( Request_H )
 #define Request_H
-
 
 //--------------------------------------------------- Interfaces utilisées
 #include <string>
@@ -18,11 +17,10 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-//------------------------------------------------------------------ Types
-
 //------------------------------------------------------------------------
 // Rôle de la classe <Request>
 //
+// Permet de lire et de stocker un objet Request.
 //
 //------------------------------------------------------------------------
 
@@ -33,20 +31,33 @@ class Request
 public:
 //----------------------------------------------------- Méthodes publiques
 
+    const string & getType() const {
+        return type;
+    }
 
+    const string & getUrl() const {
+        return url;
+    }
+
+    const string & getProtocol() const {
+        return protocol;
+    }
 
 //------------------------------------------------- Surcharge d'opérateurs
-    friend istream & operator >> (istream & is, Request & request);
+
+    friend istream & operator>>(istream & is, Request & request);
 
 //-------------------------------------------- Constructeurs - destructeur
-    Request ( );
+    Request() = default;
     // Mode d'emploi :
+    // Constructeur vide
     //
     // Contrat :
     //
 
-    virtual ~Request ( );
+    virtual ~Request() = default;
     // Mode d'emploi :
+    // Destructeur vide
     //
     // Contrat :
     //

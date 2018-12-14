@@ -12,80 +12,68 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <exception>
 
 //------------------------------------------------------ Include personnel
 #include "LogReader.h"
 
 using namespace std;
-//------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-LogReader *LogReader::GetInstance()
-// Algorithme :
+
+
+Hit * LogReader::ReadNext()
+//Algorithme :
 //
 {
-    if (!instance)
-        instance = new LogReader;
-
-    return instance;
-}
-
-Hit * LogReader::readNext()
-// Algorithme :
-//
-{
-  Hit * hit;
-  if (!stream.eof())
-  {
-      hit = new Hit;
+    if (stream.is_open() && !stream.eof())
+    {
+      Hit * hit = new Hit;
       stream >> *hit;
-  }
-  return hit;
+
+      return hit;
+    }
+    return nullptr;
 }
 
 bool LogReader::TrackNewFile(const string &path)
 //Algorithme :
 //
 {
-    stream.open(path,ios_base::in);
+    CloseFileStream();
+
+    stream.open(path, ios_base::in);
+
     return(stream.good());
 }
 
 void LogReader::CloseFileStream()
-//Algorithme :
-//
 {
-    stream.close();
+    if (stream.is_open())
+        stream.close();
 }
-
-//------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
 
-LogReader::~LogReader ( )
-// Algorithme :
-//
+LogReader::LogReader(const string & path)
 {
 #ifdef MAP
     cout << "Appel au destructeur de <LogReader>" << endl;
 #endif
-} //----- Fin de ~LogReader
 
+    if (!TrackNewFile(path))
+        throw invalid_argument("Error Opening File : " + path);
+} //----- Fin de LogReader
 
-//------------------------------------------------------------------ PRIVE
-//-------------------------------------------- Constructeurs - destructeur
-LogReader::LogReader ( )
-// Algorithme :
-//
+LogReader::~LogReader()
 {
 #ifdef MAP
     cout << "Appel au constructeur de <LogReader>" << endl;
 #endif
-    delete instance;
-} //----- Fin de LogReader
-
+    CloseFileStream();
+} //----- Fin de ~LogReader
 
 
 //----------------------------------------------------- Méthodes protégées

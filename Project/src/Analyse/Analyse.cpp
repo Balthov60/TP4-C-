@@ -27,8 +27,7 @@ void Analyse::Run()
 //Algorithme :
 //
 {
-    LogReader * logReader = LogReader::GetInstance();
-    while(analyseNextLog(*logReader));
+    while(analyseNextLog());
 }
 
 
@@ -58,16 +57,24 @@ Analyse::~Analyse ( )
 
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées
-bool Analyse::analyseNextLog(LogReader & logReader)
+bool Analyse::analyseNextLog()
 //Algorithme :
 //
 {
     Hit * hitPtr;
-    hitPtr = logReader.readNext();
+    hitPtr = logReader->ReadNext();
 
     if (hitPtr)
     {
-
+        if (hour==-1 || (hitPtr->getDatetime().GetHour() == hour)){
+            string url = hitPtr->getRequest().getUrl();
+            if (nodeCounterMap.find(url) != nodeCounterMap.end())
+            {
+                (nodeCounterMap.find(url)->second)++;
+            } else {
+                nodeCounterMap.insert({url,0});
+            }
+        }
         return true;
     } else {
         return false;

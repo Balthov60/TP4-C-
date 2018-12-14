@@ -51,25 +51,30 @@ public:
     // Contrat :
     //
 
-    void setFile(const string & filePath)
+    void SetFile(const string & filePath)
     {
         file = filePath;
     }
 
-    void setGraph(const string & graphPath)
+    void SetGraph(const string & graphPath)
     {
         generateGraph = true;
         graph = graphPath;
     }
 
-    void setHour(int aHour)
+    void SetHour(int aHour)
     {
         hour = aHour;
     }
 
-    void setExcludeResourcesFile(bool excludeResources)
+    void SetExcludeResourcesFile(bool excludeResources)
     {
         excludeResourcesFile = excludeResources;
+    }
+
+    void SetLogReader(LogReader * logReaderPtr)
+    {
+        logReader = logReaderPtr;
     }
 
 
@@ -95,7 +100,7 @@ public:
 protected:
 //----------------------------------------------------- Méthodes protégées
 
-    bool analyseNextLog(LogReader & logReader);
+    bool analyseNextLog();
     // Mode d'emploi :
     //
     // Contrat :
@@ -126,6 +131,7 @@ protected:
     int hour;
     bool excludeResourcesFile;
     bool generateGraph;
+    LogReader * logReader;
 
     unordered_map<pair<string,string>,unsigned int,pairhash> graphMapper;
     unordered_map<string,unsigned int> nodeCounterMap;

@@ -42,17 +42,21 @@ string Hit::getReferer() const
 istream & operator>>(istream & is, Hit & hit)
 {
     string temp;
+    int argsGETpos;
 
     getline(is, hit.ip, BASIC_SEPARATOR);
     getline(is, hit.logname, BASIC_SEPARATOR);
     getline(is, hit.authenticatedUser, BASIC_SEPARATOR);
 
+    //Dealing with date and time
     is >> hit.datetime;
+    //Dealing with request infos
     is >> hit.request;
 
     getline(is, temp, BASIC_SEPARATOR);
     hit.statusCode = (unsigned int) stoi(temp, nullptr, 10);
 
+    //Dealing with data quantity
     getline(is, temp, BASIC_SEPARATOR);
     if (temp.c_str()[0] == '-')         //sometimes, field data quantity has '-' char
     {                                   //thus it's necessary to test it manually to avoid stoi errors
@@ -61,8 +65,16 @@ istream & operator>>(istream & is, Hit & hit)
         hit.dataQty = (unsigned int) stoi(temp, nullptr, 10);
     }
 
+    //Dealing with referer
     is.seekg(1, ios_base::cur);
-    getline(is, hit.referer, LONG_STRING_SEPARATOR);
+    getline(is, temp, LONG_STRING_SEPARATOR);
+    argsGETpos = temp.find('?');
+    if (argsGETpos != -1 ){
+        hit.referer = temp.substr(0,argsGETpos);
+        hit.refererGetArgs = temp.substr(argsGETpos+1,string::npos);
+    } else {
+        hit.referer = temp;
+    }
 
     is.seekg(2, ios_base::cur);
     getline(is, hit.browserInfo, LONG_STRING_SEPARATOR);

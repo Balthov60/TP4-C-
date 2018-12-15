@@ -26,10 +26,23 @@ const char LONG_STRING_SEPARATOR = '"';
 
 istream & operator>>(istream & is, Request & request)
 {
+    string temp;
+    int argsGETpos;
+
     is.seekg(2, ios_base::cur);
 
     getline(is, request.type, BASIC_SEPARATOR);
-    getline(is, request.url, BASIC_SEPARATOR);
+
+    //dealing with url
+    getline(is, temp, BASIC_SEPARATOR);
+    argsGETpos = temp.find('?');
+    if (argsGETpos != -1 ){
+        request.url = temp.substr(0,argsGETpos);
+        request.url = temp.substr(argsGETpos+1,string::npos);
+    } else {
+        request.url = temp;
+    }
+
     getline(is, request.protocol, LONG_STRING_SEPARATOR);
 
     is.seekg(1, ios_base::cur);

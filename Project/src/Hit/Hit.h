@@ -126,6 +126,8 @@ protected:
     unsigned int dataQty;
 
     string referer;
+    string refererGetArgs;
+
     string browserInfo;
 
     bool relatedToResourceFile;

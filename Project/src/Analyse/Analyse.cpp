@@ -22,33 +22,20 @@ using namespace std;
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Analyse::Méthode ( liste des paramètres )
-// Algorithme :
+
+void Analyse::Run()
+//Algorithme :
 //
-//{
-//} //----- Fin de Méthode
+{
+    while(analyseNextLog());
+}
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-Analyse & Analyse::operator = ( const Analyse & unAnalyse )
-// Algorithme :
-//
-{
-} //----- Fin de operator =
-
 
 //-------------------------------------------- Constructeurs - destructeur
-Analyse::Analyse ( const Analyse & unAnalyse )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Analyse>" << endl;
-#endif
-} //----- Fin de Analyse (constructeur de copie)
 
-
-Analyse::Analyse ( )
+Analyse::Analyse ( ):hour(-1),excludeResourcesFile(false),generateGraph(false)
 // Algorithme :
 //
 {
@@ -69,6 +56,48 @@ Analyse::~Analyse ( )
 
 
 //------------------------------------------------------------------ PRIVE
-
 //----------------------------------------------------- Méthodes protégées
+bool Analyse::analyseNextLog()
+//Algorithme :
+//
+{
+    Hit * hitPtr;
+    hitPtr = logReader->ReadNext();
 
+    if (hitPtr)
+    {
+        if (hour==-1 || (hitPtr->getDatetime().GetHour() == hour)){
+            string url = hitPtr->getRequest().getUrl();
+            if (nodeCounterMap.find(url) != nodeCounterMap.end())
+            {
+                (nodeCounterMap.find(url)->second)++;
+            } else {
+                nodeCounterMap.insert({url,0});
+            }
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Analyse::generateOrderedNodeCounterMap()
+//Algorithme :
+//
+{
+
+}
+
+void Analyse::generateGraphMapper()
+//Algorithme :
+//
+{
+
+}
+
+void Analyse::displayResult()
+//Algorithme :
+//
+{
+
+}

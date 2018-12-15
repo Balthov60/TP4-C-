@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <Request> (fichier Request.cpp) ------------
+//------ Réalisation de la classe <Request> (fichier Request.cpp) --------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -18,55 +18,24 @@
 
 using namespace std;
 //------------------------------------------------------------- Constantes
-
+const char BASIC_SEPARATOR = ' ';
+const char LONG_STRING_SEPARATOR = '"';
 //----------------------------------------------------------------- PUBLIC
 
-//----------------------------------------------------- Méthodes publiques
-// type Request::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
-
 //------------------------------------------------- Surcharge d'opérateurs
-Request & Request::operator = ( const Request & unRequest )
-// Algorithme :
-//
+
+istream & operator>>(istream & is, Request & request)
 {
-} //----- Fin de operator =
+    is.seekg(2, ios_base::cur);
 
+    getline(is, request.type, BASIC_SEPARATOR);
+    getline(is, request.url, BASIC_SEPARATOR);
+    getline(is, request.protocol, LONG_STRING_SEPARATOR);
 
-//-------------------------------------------- Constructeurs - destructeur
-Request::Request ( const Request & unRequest )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Request>" << endl;
-#endif
-} //----- Fin de Request (constructeur de copie)
+    is.seekg(1, ios_base::cur);
 
-
-Request::Request ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <Request>" << endl;
-#endif
-} //----- Fin de Request
-
-
-Request::~Request ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <Request>" << endl;
-#endif
-} //----- Fin de ~Request
-
+    return is;
+}
 
 //------------------------------------------------------------------ PRIVE
 

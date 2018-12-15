@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <Datetime> (fichier Datetime.cpp) ------------
+//---- Réalisation de la classe <Datetime> (fichier Datetime.cpp) --------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -19,54 +19,45 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
+const char DATE_SEPARATOR = '/';
+const char TIME_SEPARATOR = ':';
+const char BASIC_SEPARATOR = ' ';
+const char END_INDICATOR = ']';
+
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type Datetime::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
-
 
 //------------------------------------------------- Surcharge d'opérateurs
-Datetime & Datetime::operator = ( const Datetime & unDatetime )
-// Algorithme :
-//
+
+istream & operator>>(istream & is, Datetime & datetime)
 {
-} //----- Fin de operator =
+    string temp;
 
+    is.seekg(1, ios_base::cur);                 // Escape First Start Indicator
 
-//-------------------------------------------- Constructeurs - destructeur
-Datetime::Datetime ( const Datetime & unDatetime )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de copie de <Datetime>" << endl;
-#endif
-} //----- Fin de Datetime (constructeur de copie)
+    getline(is, temp, DATE_SEPARATOR);
+    datetime.day = (unsigned short) stoul(temp, nullptr,10);
 
+    getline(is, temp, DATE_SEPARATOR);
+    sprintf(datetime.month, "%.4s", temp.c_str());
 
-Datetime::Datetime ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <Datetime>" << endl;
-#endif
-} //----- Fin de Datetime
+    getline(is, temp, TIME_SEPARATOR);
+    datetime.year = (unsigned short) stoul(temp, nullptr,10);
 
+    getline(is,temp, TIME_SEPARATOR);
+    datetime.hour = (unsigned short) stoul(temp, nullptr,10);
 
-Datetime::~Datetime ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au destructeur de <Datetime>" << endl;
-#endif
-} //----- Fin de ~Datetime
+    getline(is, temp, TIME_SEPARATOR);
+    datetime.minutes = (unsigned short) stoul(temp, nullptr, 10);
 
+    getline(is, temp ,BASIC_SEPARATOR);
+    datetime.seconds = (unsigned short) stoul(temp, nullptr, 10);
+
+    getline(is, datetime.utc, END_INDICATOR);
+
+    return is;
+}
 
 //------------------------------------------------------------------ PRIVE
 

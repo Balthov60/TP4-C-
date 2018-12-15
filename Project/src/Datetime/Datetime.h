@@ -6,20 +6,23 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Datetime> (fichier Datetime.h) ----------------
+//----- Interface de la classe <Datetime> (fichier Datetime.h) -----------
 #if ! defined ( Datetime_H )
 #define Datetime_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <string>
+#include <iostream>
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
-//------------------------------------------------------------------ Types
+const unsigned short int MONTH_LENGTH = 3;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Datetime>
 //
-//
+// Permet de lire et de stocker un objet datetime.
 //------------------------------------------------------------------------
 
 class Datetime
@@ -27,37 +30,53 @@ class Datetime
 //----------------------------------------------------------------- PUBLIC
 
 public:
-//----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+//-------------------------------------------------------- Methode publics
+
+    unsigned short GetDay() const {
+        return day;
+    }
+
+    const char * GetMonth() const {
+        return month;
+    }
+
+    unsigned short GetYear() const {
+        return year;
+    }
+
+    unsigned short GetHour() const {
+        return hour;
+    }
+
+    unsigned short GetMinutes() const {
+        return minutes;
+    }
+
+    unsigned short GetSecondes() const {
+        return seconds;
+    }
+
+    const string& GetUtc() const {
+        return utc;
+    }
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Datetime & operator = ( const Datetime & unDatetime );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+friend istream & operator>>(istream & is, Datetime & datetime);
 
 //-------------------------------------------- Constructeurs - destructeur
-    Datetime ( const Datetime & unDatetime );
-    // Mode d'emploi (constructeur de copie) :
+
+    Datetime() = default;
+    // Mode d'emploi :
+    // Constructeur vide
     //
     // Contrat :
     //
 
-    Datetime ( );
+    virtual ~Datetime() = default;
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~Datetime ( );
-    // Mode d'emploi :
+    // Destructeur vide
     //
     // Contrat :
     //
@@ -68,10 +87,18 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    unsigned short int day{};
+    char month[MONTH_LENGTH+1]{};
+    unsigned short int year{};
 
+    unsigned short int hour{};
+    unsigned short int minutes{};
+    unsigned short int seconds{};
+
+    string utc;
 };
 
-//-------------------------------- Autres définitions dépendantes de <Datetime>
+//--------------------------- Autres définitions dépendantes de <Datetime>
 
 #endif // Datetime_H
 

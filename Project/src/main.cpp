@@ -4,6 +4,12 @@
 #include "ArgumentParser/ArgumentParser.h"
 #include "Analyse/Analyse.h"
 
+#include <string>
+#include <iostream>
+#include <sstream>
+using namespace std;
+
+
 int main(int argc, char *argv[])
 {
     Analyse analyse;
@@ -16,6 +22,17 @@ int main(int argc, char *argv[])
 
     if (ArgumentParser::Parse(command, analyse))
         return 1;
+
+    try
+    {
+        logReader = new LogReader("../anonyme copie.log");
+    }
+    catch (exception & e)
+    {
+        cerr << e.what();
+        delete logReader;
+        return 1;
+    }
 
     return 0;
 }

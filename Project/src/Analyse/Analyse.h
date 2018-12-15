@@ -14,10 +14,24 @@
 
 #include "../GraphVizWriter/GraphVizWriter.h"
 #include "../LogReader/LogReader.h"
+#include <string>
+#include <unordered_map>
+#include <map>
+#include <utility>
+
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+struct pairhash {
+public:
+    template <typename T, typename U>
+    size_t operator()(const pair<T, U> &x) const
+    {
+        return hash<T>()(x.first) ^ hash<U>()(x.second);
+    }
+};
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
@@ -31,29 +45,45 @@ class Analyse
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
+    void Run();
     // Mode d'emploi :
     //
     // Contrat :
     //
+
+    void SetFile(const string & filePath)
+    {
+        file = filePath;
+    }
+
+    void SetGraph(const string & graphPath)
+    {
+        generateGraph = true;
+        graph = graphPath;
+    }
+
+    void SetHour(int aHour)
+    {
+        hour = aHour;
+    }
+
+    void SetExcludeResourcesFile(bool excludeResources)
+    {
+        excludeResourcesFile = excludeResources;
+    }
+
+    void SetLogReader(LogReader * logReaderPtr)
+    {
+        logReader = logReaderPtr;
+    }
+
 
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Analyse & operator = ( const Analyse & unAnalyse );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
 
 //-------------------------------------------- Constructeurs - destructeur
-    Analyse ( const Analyse & unAnalyse );
-    // Mode d'emploi (constructeur de copie) :
-    //
-    // Contrat :
-    //
-
-    Analyse ( );
+    Analyse ();
     // Mode d'emploi :
     //
     // Contrat :
@@ -70,8 +100,42 @@ public:
 protected:
 //----------------------------------------------------- Méthodes protégées
 
-//----------------------------------------------------- Attributs protégés
+    bool analyseNextLog();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
 
+    void generateOrderedNodeCounterMap();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void generateGraphMapper();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+    void displayResult();
+    // Mode d'emploi :
+    //
+    // Contrat :
+    //
+
+
+//----------------------------------------------------- Attributs protégés
+    string file;
+    string graph;
+    int hour;
+    bool excludeResourcesFile;
+    bool generateGraph;
+    LogReader * logReader;
+
+    unordered_map<pair<string,string>,unsigned int,pairhash> graphMapper;
+    unordered_map<string,unsigned int> nodeCounterMap;
+    multimap<unsigned int, string *> orderedNodeCounterMap;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

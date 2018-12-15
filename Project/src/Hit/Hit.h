@@ -9,13 +9,14 @@
 //---------- Interface de la classe <Hit> (fichier Hit.h) ----------------
 #if ! defined ( Hit_H )
 #define Hit_H
-using namespace std;
-//--------------------------------------------------- Interfaces utilisées
 
+//--------------------------------------------------- Interfaces utilisées
 #include "../Datetime/Datetime.h"
 #include "../Request/Request.h"
 #include <string>
+#include <iostream>
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -23,7 +24,7 @@ using namespace std;
 //------------------------------------------------------------------------
 // Rôle de la classe <Hit>
 //
-//
+// Permet de lire et de stocker une ligne de log.
 //------------------------------------------------------------------------
 
 class Hit
@@ -33,27 +34,64 @@ class Hit
 public:
 //----------------------------------------------------- Méthodes publiques
 
+    const string & getIp() const {
+        return ip;
+    }
+
+    const string & getLogname() const {
+        return logname;
+    }
+
+    const string & getAuthenticatedUser() const {
+        return authenticatedUser;
+    }
+
+    const Datetime & getDatetime() const {
+        return datetime;
+    }
+
+    const Request & getRequest() const {
+        return request;
+    }
+
+    unsigned int getStatusCode() const {
+        return statusCode;
+    }
+
+    unsigned int getDataQty() const {
+        return dataQty;
+    }
+
+    const string & getReferer() const {
+        return referer;
+    }
+
+    const string & getBrowserInfo() const {
+        return browserInfo;
+    }
 
 //------------------------------------------------- Surcharge d'opérateurs
 
-    friend istream & operator << (istream & is, Hit & hit);
-
+    friend istream & operator>>(istream & is, Hit & hit);
+    // Mode d'emploi :
+    // Prend un flux en entrée et remplit l'instance avec les premières informations trouvées.
+    //
+    // Contrat :
+    // Le contenu du flux doit être formatté correctement.
+    //
 
 //-------------------------------------------- Constructeurs - destructeur
-    Hit ( const Hit & unHit );
-    // Mode d'emploi (constructeur de copie) :
+
+    Hit() = default;
+    // Mode d'emploi :
+    // Constructeur vide
     //
     // Contrat :
     //
 
-    Hit ( );
+    virtual ~Hit() = default;
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~Hit ( );
-    // Mode d'emploi :
+    // Destructeur vide
     //
     // Contrat :
     //
@@ -67,8 +105,13 @@ protected:
     string ip;
     string logname;
     string authenticatedUser;
+
+    Datetime datetime;
+    Request request;
+
     unsigned int statusCode;
     unsigned int dataQty;
+
     string referer;
     string browserInfo;
 };

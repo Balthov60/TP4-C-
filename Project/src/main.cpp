@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    int i = 0;
+    /*int i = 0;
     Hit * hit;
     while ((hit = logReader->ReadNext()) != nullptr)
     {
@@ -35,7 +35,13 @@ int main(int argc, char *argv[])
         i++;
     }
 
-    cout << "End " << i << endl;
+    cout << "End " << i << endl;*/
+
+    analyse.SetLogReader(logReader);
+    analyse.SetGraph("test");
+    analyse.Run();
+
+
     delete logReader;
 
     return 0;

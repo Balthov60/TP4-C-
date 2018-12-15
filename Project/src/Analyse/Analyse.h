@@ -51,11 +51,6 @@ public:
     // Contrat :
     //
 
-    void SetFile(const string & filePath)
-    {
-        file = filePath;
-    }
-
     void SetGraph(const string & graphPath)
     {
         generateGraph = true;
@@ -126,16 +121,15 @@ protected:
 
 
 //----------------------------------------------------- Attributs protégés
-    string file;
     string graph;
     int hour;
     bool excludeResourcesFile;
     bool generateGraph;
     LogReader * logReader;
 
-    unordered_map<pair<string,string>,unsigned int,pairhash> graphMapper;
+    unordered_map<pair<const string *,string>,unsigned int,pairhash> graphMapper;
     unordered_map<string,unsigned int> nodeCounterMap;
-    multimap<unsigned int, string *> orderedNodeCounterMap;
+    multimap<unsigned int,const string *> orderedNodeCounterMap;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

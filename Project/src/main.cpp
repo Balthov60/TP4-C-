@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "ArgumentParser/ArgumentParser.h"
 #include "Analyse/Analyse.h"
@@ -12,9 +13,15 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     Analyse analyse;
-    LogReader * logReader;
+    string command = " ";
 
-    if (ArgumentParser::Parse(argc, argv, analyse));
+    for (int i = 1; i < argc; i++)
+        command.append(argv[i]).append(" ");
+
+    cout << "Command : \"" << command << "\"" << endl;
+
+    if (ArgumentParser::Parse(command, analyse))
+        return 1;
 
     try
     {
@@ -26,17 +33,6 @@ int main(int argc, char *argv[])
         delete logReader;
         return 1;
     }
-
-    int i = 0;
-    Hit * hit;
-    while ((hit = logReader->ReadNext()) != nullptr)
-    {
-        cout << i << " " << hit->getIp() << endl;
-        i++;
-    }
-
-    cout << "End " << i << endl;
-    delete logReader;
 
     return 0;
 }

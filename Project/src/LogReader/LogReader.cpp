@@ -12,55 +12,63 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <exception>
 
 //------------------------------------------------------ Include personnel
 #include "LogReader.h"
 
 using namespace std;
-//------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type LogReader::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
-//------------------------------------------------- Surcharge d'opérateurs
+Hit * LogReader::ReadNext()
+{
+    if (stream.is_open() && !stream.eof())
+    {
+      Hit * hit = new Hit;
+      stream >> *hit;
+
+      return hit;
+    }
+    return nullptr;
+}
+
+bool LogReader::TrackNewFile(const string &path)
+{
+    CloseFileStream();
+
+    stream.open(path, ios_base::in);
+
+    return(stream.good());
+}
+
+void LogReader::CloseFileStream()
+{
+    if (stream.is_open())
+        stream.close();
+}
 
 //-------------------------------------------- Constructeurs - destructeur
 
-LogReader::LogReader ( )
-// Algorithme :
-//
-{
-#ifdef MAP
-    cout << "Appel au constructeur de <LogReader>" << endl;
-#endif
-} //----- Fin de LogReader
-
-
-LogReader::~LogReader ( )
-// Algorithme :
-//
+LogReader::LogReader(const string & path)
 {
 #ifdef MAP
     cout << "Appel au destructeur de <LogReader>" << endl;
 #endif
-}
 
-LogReader *LogReader::GetInstance() {
-    if (!instance)
-        instance = new LogReader;
+    if (!TrackNewFile(path))
+        throw invalid_argument("Error Opening File : " + path);
+} //----- Fin de LogReader
 
-    return instance;
-}
-//----- Fin de ~LogReader
-
-
-//------------------------------------------------------------------ PRIVE
+LogReader::~LogReader()
+{
+#ifdef MAP
+    cout << "Appel au constructeur de <LogReader>" << endl;
+#endif
+    CloseFileStream();
+} //----- Fin de ~LogReader
 
 //----------------------------------------------------- Méthodes protégées
 

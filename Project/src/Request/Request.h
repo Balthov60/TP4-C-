@@ -6,19 +6,21 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe <Request> (fichier Request.h) ----------------
+//------- Interface de la classe <Request> (fichier Request.h) -----------
 #if ! defined ( Request_H )
 #define Request_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <string>
+#include <iostream>
 
+using namespace std;
 //------------------------------------------------------------- Constantes
-
-//------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Request>
 //
+// Permet de lire et de stocker un objet Request.
 //
 //------------------------------------------------------------------------
 
@@ -28,36 +30,34 @@ class Request
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+    const string & getType() const {
+        return type;
+    }
+
+    const string & getUrl() const {
+        return url;
+    }
+
+    const string & getProtocol() const {
+        return protocol;
+    }
 
 //------------------------------------------------- Surcharge d'opérateurs
-    Request & operator = ( const Request & unRequest );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
+    friend istream & operator>>(istream & is, Request & request);
 
 //-------------------------------------------- Constructeurs - destructeur
-    Request ( const Request & unRequest );
-    // Mode d'emploi (constructeur de copie) :
+    Request() = default;
+    // Mode d'emploi :
+    // Constructeur vide
     //
     // Contrat :
     //
 
-    Request ( );
+    virtual ~Request() = default;
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    virtual ~Request ( );
-    // Mode d'emploi :
+    // Destructeur vide
     //
     // Contrat :
     //
@@ -68,7 +68,9 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-
+    string type;
+    string url;
+    string protocol;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Request>

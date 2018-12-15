@@ -11,9 +11,11 @@
 #define LogReader_H
 
 //--------------------------------------------------- Interfaces utilisées
+#include <fstream>
 
 #include "../Hit/Hit.h"
 
+using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -21,6 +23,8 @@
 //------------------------------------------------------------------------
 // Rôle de la classe <LogReader>
 //
+// La classe LogReader permet de charger et de lire le contenu d'un fichier
+// de log en créant des objets Hit pour chaque entrée.
 //
 //------------------------------------------------------------------------
 
@@ -30,29 +34,45 @@ class LogReader
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
+
+    Hit * ReadNext();
     // Mode d'emploi :
+    // Lit la prochaine ligne de log.
+    // Renvoi nullptr si le fichier de log est terminée.
+    // Sinon renvoi un objet Hit correspondant au log lu.
     //
-    // Contrat :
+    // Contrat:
     //
 
-    LogReader * GetInstance();
+    bool TrackNewFile(const string & path);
+    // Mode d'emploi :
+    // Ferme l'ancien flux et essaye d'en ouvrir un nouveau sur le fichier pointé par "path"
+    // Renvoi true si le fichier est correctement ouvert sinon renvoi false.
+    //
+    // Contrat:
+    //
 
+    void CloseFileStream();
+    // Mode d'emploi :
+    // Ferme le flux si il est ouvert.
+    //
+    // Contrat:
+    //
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
 
-private:
-    LogReader ( );
+    explicit LogReader(const string & path);
     // Mode d'emploi :
+    // Crée un object LogReader et lui associe un fichier de log.
     //
     // Contrat :
     //
 
-public:
-    virtual ~LogReader ( );
+    virtual ~LogReader();
     // Mode d'emploi :
+    // Ferme le flux du fichier de log.
     //
     // Contrat :
     //
@@ -63,8 +83,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-
-    LogReader * instance;
+    ifstream stream;
 
 };
 

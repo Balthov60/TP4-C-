@@ -38,7 +38,7 @@ public:
     // Contrat :
     //
 
-    static bool Parse(string command, Analyse & analyse);
+    static bool Parse(string &command, Analyse &analyse);
     // Mode d'emploi :
     //
     // Contrat :
@@ -52,6 +52,14 @@ public:
 
 protected:
 //----------------------------------------------------- Méthodes protégées
+
+
+    static bool testTimeArgs(string &command, Analyse &analyse);
+
+    static bool testGraphArgs(string &command, Analyse &analyse);
+    static bool askForFileOverride();
+
+    static bool testLogArgs(string &command, Analyse &analyse);
 
 //----------------------------------------------------- Attributs protégés
     static const regex commandRegex;

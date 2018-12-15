@@ -6,9 +6,9 @@
 
 #include <string>
 #include <iostream>
-#include <sstream>
-using namespace std;
+#include <iomanip>
 
+using namespace std;
 
 int main(int argc, char *argv[])
 {
@@ -20,18 +20,17 @@ int main(int argc, char *argv[])
 
     cout << "Command : \"" << command << "\"" << endl;
 
-    if (ArgumentParser::Parse(command, analyse))
-        return 1;
-
-    try
+    if (!ArgumentParser::Parse(command, analyse))
     {
-        logReader = new LogReader("../anonyme copie.log");
-    }
-    catch (exception & e)
-    {
-        cerr << e.what();
-        delete logReader;
-        return 1;
+        cout                                                                                                                    << endl;
+        cout << "Format de la commande non valide..."                                                                           << endl;
+        cout                                                                                                                    << endl;
+        cout << "Utilisation de ./analog [-e|-g|-t] <path>"                                                                     << endl;
+        cout << "   <path>"        << setw(10) << " : " << "chemin vers un fichier d’extension .txt ou .log."                   << endl;
+        cout << "   -e"            << setw(14) << " : " << "Exclut les documents de type image, css ou javascript."             << endl;
+        cout << "   -g <path.dot>" << setw(3)  << " : " << "Genère le fichier <path.dot> au format GraphViz du graphe analysé." << endl;
+        cout << "   -t [0-23]"	   << setw(7)  << " : " << "Prend en compte que les hits dans le créneau horaire [t, t+1]."     << endl;
+        cout                                                                                                                    << endl;
     }
 
     return 0;

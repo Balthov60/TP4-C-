@@ -20,49 +20,144 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const regex ArgumentParser::commandRegex = regex("^(( -g \\S+\\.dot)|( -e)|( -t (2[0-3]|1?[0-9]))){0,3} \\S+\\.(txt|log) $");
+const regex ArgumentParser::commandRegex = regex("^(( -g \\S+\\.dot)|( -e)|( -t [0-9]+)){0,3} \\S+\\.(txt|log) $");
 const regex ArgumentParser::graphPathArgRegex = regex("\\S+\\.dot");
-const regex ArgumentParser::timeArgRegex = regex("-t (2[0-3]|1?[0-9])");
+const regex ArgumentParser::timeArgRegex = regex("-t [0-9]+");
 const regex ArgumentParser::logPathArgRegex = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------------------- PUBLIC
+
 //----------------------------------------------------- Méthodes publiques
 
-bool ArgumentParser::Parse(string command, Analyse &analyse)
+bool ArgumentParser::Parse(string &command, Analyse &analyse)
 {
     if (!regex_match(command, commandRegex))
         return false;
 
     smatch match;
 
-    if (regex_search(command, match, graphPathArgRegex))    //TODO: Add Cas use si multiple options
-    {
-        // analyse.SetGraphPath(match[0]);
-    }
+    if (!testTimeArgs(command, analyse))
+        return false;
 
-    if (regex_search(command, match, timeArgRegex))    //TODO: Add Cas use si multiple options
-    {
-        string path = match[0];
-        size_t pos = path.find(' ');
-
-        // analyse.SetHour(stoi(path.substr(pos)));
-    }
+    if (!testGraphArgs(command, analyse))
+        return false;
 
     if (command.find("-e") != string::npos)
     {
-        // analyse.SetExcludeResourcesFile(true);
+        analyse.SetExcludeResourcesFile(true);
     }
 
-    if (regex_search(command, match, logPathArgRegex))
-    {
-        // LogReader * logReader = LogReader::GetInstance();
-    }
-
-    return false;
+    return testLogArgs(command, analyse);
 }
-
-//-------------------------------------------- Constructeurs - destructeur
 
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
+
+bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
+{
+    smatch match;
+
+    if (regex_search(command, match, timeArgRegex))    //TODO: Add Cas use si multiple options
+    {
+        string args = match[0];
+        size_t pos = args.find(' ');
+        int hour;
+
+        try
+        {
+            hour = stoi(args.substr(pos));
+        }
+        catch(exception & e)
+        {
+            return false;
+        }
+
+        if (hour < 0 || hour > 23)
+        {
+            cout << "L'heure doit être un entier compris entre 0 et 23." << endl;
+            return false;
+        }
+
+        analyse.SetHour(hour);
+    }
+
+    return true;
+}
+
+bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
+{
+    smatch match;
+
+    if (regex_search(command, match, graphPathArgRegex))    //TODO: Add Cas use si multiple options
+    {
+        string args = match[0];
+        size_t pos = args.find(' ');
+
+        string path = args.substr(pos);
+
+        ifstream fileExistStream(path);
+        if (fileExistStream.good())
+        {
+            fileExistStream.close();
+
+            if (askForFileOverride())
+            {
+                analyse.SetGraph(command);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        ofstream fileCanBeCreatedStream(path);
+        if (fileCanBeCreatedStream.good())
+        {
+            analyse.SetGraph(path);
+        }
+    }
+
+    return true;
+}
+bool ArgumentParser::askForFileOverride()
+{
+    for ( ; ; )
+    {
+        char r;
+        cout << "Le fichier existe déjà, voulez vous l'écraser, (o/n) : ";
+        cin >> r;
+
+        if (r == 'o' || r == 'O')
+            return true;
+
+        if (r == 'n' || r == 'N')
+            return false;
+    }
+}
+
+bool ArgumentParser::testLogArgs(string &command, Analyse &analyse)
+{
+    smatch match;
+
+    if (regex_search(command, match, logPathArgRegex))
+    {
+        LogReader * logReader;
+
+        try
+        {
+            logReader = new LogReader(match[0]);
+        }
+        catch (exception & e)
+        {
+            cerr << "Impossible d'ouvrir le fichier demandé." << endl;
+            return false;
+        }
+
+        analyse.SetLogReader(logReader);
+        return true;
+    }
+
+    return true;
+}

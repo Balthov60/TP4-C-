@@ -21,8 +21,8 @@
 
 //------------------------------------------------------------------------
 // Rôle de la classe <ArgumentParser>
-
-// Parse la commande en entrée et crée l'instance d'Analyse associé
+//
+// Parse la commande en entrée et configure l'instance d'Analyse associée
 //
 //------------------------------------------------------------------------
 
@@ -32,16 +32,14 @@ class ArgumentParser
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
-    //
-    // Contrat :
-    //
 
-    static bool Parse(string command, Analyse & analyse);
+    static bool Parse(string &args, Analyse &analyse);
     // Mode d'emploi :
+    // Vérifie que les arguments sont bien formatté et configurer l'analyse passé en paramètre.
     //
-    // Contrat :
+    // args     : string    contenant les arguments de la command.
+    // analyse  : Analyse   l'analyse est configuré selon les arguments rencontré par le parser.
+    // return   : true si les arguments sont bien formattés, false sinon.
     //
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -53,12 +51,40 @@ public:
 protected:
 //----------------------------------------------------- Méthodes protégées
 
+
+    static bool testTimeArgs(string &command, Analyse &analyse);
+    // Mode d'emploi :
+    // Vérifie l'arguments de temps et configure analyse avec le contenu.
+    //
+    // return : true si l'argument est bien formatté, false sinon.
+    //
+
+    static bool testGraphArgs(string &command, Analyse &analyse);
+    // Mode d'emploi :
+    // Vérifie l'arguments de génération de graph et configure analyse avec le contenu.
+    //
+    // return : true si l'argument est bien formatté, false sinon.
+    //
+
+    static bool testLogArgs(string &command, Analyse &analyse);
+    // Mode d'emploi :
+    // Vérifie l'arguments de path des logs et configure analyse avec le contenu.
+    //
+    // return : true si l'argument est bien formatté, false sinon.
+    //
+
+    static bool askForFileOverride();
+    // Mode d'emploi :
+    // Demande à l'utilisateur si il veut ecraser un fichier.
+    //
+    // return : true ou false selon la réponse.
+
 //----------------------------------------------------- Attributs protégés
+
     static const regex commandRegex;
     static const regex graphPathArgRegex;
     static const regex timeArgRegex;
     static const regex logPathArgRegex;
-
 };
 
 //--------------------- Autres définitions dépendantes de <ArgumentParser>

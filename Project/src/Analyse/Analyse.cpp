@@ -37,7 +37,7 @@ void Analyse::Run()
 
 //-------------------------------------------- Constructeurs - destructeur
 
-Analyse::Analyse ( ):hour(-1),excludeResourcesFile(false),generateGraph(false)
+Analyse::Analyse():hour(-1), excludeResourcesFile(false), generateGraph(false)
 // Algorithme :
 //
 {
@@ -47,7 +47,7 @@ Analyse::Analyse ( ):hour(-1),excludeResourcesFile(false),generateGraph(false)
 } //----- Fin de Analyse
 
 
-Analyse::~Analyse ( )
+Analyse::~Analyse()
 // Algorithme :
 //
 {

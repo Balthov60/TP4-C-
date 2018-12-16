@@ -24,14 +24,6 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
-struct pairhash {
-public:
-    template <typename T, typename U>
-    size_t operator()(const pair<T, U> &x) const
-    {
-        return hash<T>()(x.first) ^ hash<U>()(x.second);
-    }
-};
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
@@ -127,9 +119,9 @@ protected:
     bool generateGraph;
     LogReader * logReader;
 
-    unordered_map<pair<const string *,string>,unsigned int,pairhash> graphMapper;
-    unordered_map<string,unsigned int> nodeCounterMap;
-    multimap<unsigned int,const string *> orderedNodeCounterMap;
+    GraphMapper graphMapper;
+    unordered_map<string, unsigned int> nodeCounterMap;
+    multimap<unsigned int, string *> orderedNodeCounterMap;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

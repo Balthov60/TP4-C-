@@ -54,7 +54,7 @@ istream & operator>>(istream & is, Hit & hit)
     getline(is, hit.browserInfo, LONG_STRING_SEPARATOR);
 
     //getline(is, temp);  // Remove end of file indicator (use of this line generates an error at the end of anonyme.log)
-    //TODO : find a better fix to EOF problem. 
+    //TODO : find a better fix to EOF problem.
     is.seekg(1, ios_base::cur);
     if (is.get() != -1)
         is.seekg(-1,ios_base::cur);

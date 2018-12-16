@@ -23,7 +23,10 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
+
 Hit * LogReader::ReadNext()
+//Algorithme :
+//
 {
     if (stream.is_open() && !stream.eof())
     {
@@ -36,6 +39,8 @@ Hit * LogReader::ReadNext()
 }
 
 bool LogReader::TrackNewFile(const string &path)
+//Algorithme :
+//
 {
     CloseFileStream();
 
@@ -69,6 +74,7 @@ LogReader::~LogReader()
 #endif
     CloseFileStream();
 } //----- Fin de ~LogReader
+
 
 //----------------------------------------------------- Méthodes protégées
 

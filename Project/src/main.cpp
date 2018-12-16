@@ -1,42 +1,32 @@
 #include <iostream>
+#include <string>
+#include <iomanip>
 
 #include "ArgumentParser/ArgumentParser.h"
 #include "Analyse/Analyse.h"
 
-#include <string>
-#include <iostream>
-#include <sstream>
 using namespace std;
-
 
 int main(int argc, char *argv[])
 {
     Analyse analyse;
-    LogReader * logReader;
+    string command = " ";
 
-    if (ArgumentParser::Parse(argc, argv, analyse));
+    for (int i = 1; i < argc; i++)
+        command.append(argv[i]).append(" ");
 
-    try
+    if (!ArgumentParser::Parse(command, analyse))
     {
-        logReader = new LogReader("../anonyme copie.log");
+        cout                                                                                            << endl;
+        cout << "Format de la commande non valide..."                                                   << endl;
+        cout                                                                                            << endl;
+        cout << "Utilisation de ./analog [-e|-g|-t] <path>"                                             << endl;
+        cout << "   <path>        : chemin vers un fichier d’extension .txt ou .log."                   << endl;
+        cout << "   -e            : Exclut les documents de type image, css ou javascript."             << endl;
+        cout << "   -g <path.dot> : Genère le fichier <path.dot> au format GraphViz du graphe analysé." << endl;
+        cout << "   -t [0-23]     : Prend en compte que les hits dans le créneau horaire [t, t+1]."     << endl;
+        cout                                                                                            << endl;
     }
-    catch (exception & e)
-    {
-        cerr << e.what();
-        delete logReader;
-        return 1;
-    }
-
-    int i = 0;
-    Hit * hit;
-    while ((hit = logReader->ReadNext()) != nullptr)
-    {
-        cout << i << " " << hit->getIp() << endl;
-        i++;
-    }
-
-    cout << "End " << i << endl;
-    delete logReader;
 
     return 0;
 }

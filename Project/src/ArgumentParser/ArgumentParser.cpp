@@ -20,10 +20,10 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const regex ArgumentParser::commandRegex = regex("^(( -g \\S+\\.dot)|( -e)|( -t [0-9]+)){0,3} \\S+\\.(txt|log) $");
-const regex ArgumentParser::graphPathArgRegex = regex("\\S+\\.dot");
-const regex ArgumentParser::timeArgRegex = regex("-t [0-9]+");
-const regex ArgumentParser::logPathArgRegex = regex("\\S+\\.(txt|log)");
+const regex ArgumentParser::commandRegex        = regex(R"(^(( -g \S+\.dot)|( -e)|( -t [0-9]+)){0,3} \S+\.(txt|log) $)");
+const regex ArgumentParser::graphPathArgRegex   = regex("\\S+\\.dot");
+const regex ArgumentParser::timeArgRegex        = regex("-t [0-9]+");
+const regex ArgumentParser::logPathArgRegex     = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------------------- PUBLIC
 
@@ -58,7 +58,7 @@ bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, timeArgRegex))    //TODO: Add Cas use si multiple options
+    if (regex_search(command, match, timeArgRegex))
     {
         string args = match[0];
         size_t pos = args.find(' ');
@@ -89,7 +89,7 @@ bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, graphPathArgRegex))    //TODO: Add Cas use si multiple options
+    if (regex_search(command, match, graphPathArgRegex))
     {
         string args = match[0];
         size_t pos = args.find(' ');

@@ -34,12 +34,12 @@ bool GraphVizWriter::Write(GraphMapper &graphMapper, string &path)
 
     for (auto &it : graphMapper)
     {
-        stream << it.first.first << ";" << endl;
+        stream << *(it.first.first) << ";" << endl;
     }
 
     for (auto &it : graphMapper)
     {
-        stream << it.first.first << " -> " << it.first.second << " [label=\"" << it.second << "\"];" << endl;
+        stream << *(it.first.first) << " -> " << it.first.second << " [label=\"" << it.second << "\"];" << endl;
     }
 
     stream << "}" << endl;

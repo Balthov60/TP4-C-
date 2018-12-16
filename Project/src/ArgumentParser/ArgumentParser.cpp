@@ -20,45 +20,43 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const regex ArgumentParser::commandRegex        = regex(R"(^(( -g \S+\.dot)|( -e)|( -t [0-9]+)){0,3} \S+\.(txt|log) $)");
-const regex ArgumentParser::graphPathArgRegex   = regex("\\S+\\.dot");
-const regex ArgumentParser::timeArgRegex        = regex("-t [0-9]+");
-const regex ArgumentParser::logPathArgRegex     = regex("\\S+\\.(txt|log)");
+const regex ArgumentParser::commandRegex      = regex(R"(^(( -g \S+\.dot)|( -e)|( -t [0-9]+)){0,3} \S+\.(txt|log) $)");
+const regex ArgumentParser::graphPathArgRegex = regex("\\S+\\.dot");
+const regex ArgumentParser::timeArgRegex      = regex("-t [0-9]+");
+const regex ArgumentParser::logPathArgRegex   = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
-bool ArgumentParser::Parse(string &command, Analyse &analyse)
+bool ArgumentParser::Parse(string &args, Analyse &analyse) //TODO add another return type if file don't want to be override
 {
-    if (!regex_match(command, commandRegex))
+    if (!regex_match(args, commandRegex))
         return false;
 
     smatch match;
 
-    if (!testTimeArgs(command, analyse))
+    if (!testTimeArgs(args, analyse))
         return false;
 
-    if (!testGraphArgs(command, analyse))
+    if (!testGraphArgs(args, analyse))
         return false;
 
-    if (command.find("-e") != string::npos)
-    {
+    if (args.find("-e") != string::npos)
         analyse.SetExcludeResourcesFile(true);
-    }
 
-    return testLogArgs(command, analyse);
+    return testLogArgs(args, analyse);
 }
 
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
 
-bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testTimeArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, timeArgRegex))
+    if (regex_search(args, match, timeArgRegex))
     {
         string args = match[0];
         size_t pos = args.find(' ');
@@ -85,16 +83,13 @@ bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
     return true;
 }
 
-bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testGraphArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, graphPathArgRegex))
+    if (regex_search(args, match, graphPathArgRegex))
     {
-        string args = match[0];
-        size_t pos = args.find(' ');
-
-        string path = args.substr(pos);
+        string path = match[0];
 
         ifstream fileExistStream(path);
         if (fileExistStream.good())
@@ -103,7 +98,7 @@ bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
 
             if (askForFileOverride())
             {
-                analyse.SetGraph(command);
+                analyse.SetGraph(path);
                 return true;
             }
             else
@@ -137,11 +132,11 @@ bool ArgumentParser::askForFileOverride()
     }
 }
 
-bool ArgumentParser::testLogArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testLogArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, logPathArgRegex))
+    if (regex_search(args, match, logPathArgRegex))
     {
         LogReader * logReader;
 

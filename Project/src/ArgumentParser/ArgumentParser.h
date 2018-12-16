@@ -52,21 +52,21 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 
-    static bool testTimeArgs(string &command, Analyse &analyse);
+    static bool testTimeArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
     // Vérifie l'arguments de temps et configure analyse avec le contenu.
     //
     // return : true si l'argument est bien formatté, false sinon.
     //
 
-    static bool testGraphArgs(string &command, Analyse &analyse);
+    static bool testGraphArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
     // Vérifie l'arguments de génération de graph et configure analyse avec le contenu.
     //
     // return : true si l'argument est bien formatté, false sinon.
     //
 
-    static bool testLogArgs(string &command, Analyse &analyse);
+    static bool testLogArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
     // Vérifie l'arguments de path des logs et configure analyse avec le contenu.
     //

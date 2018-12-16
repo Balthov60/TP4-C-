@@ -15,7 +15,11 @@ int main(int argc, char *argv[])
     for (int i = 1; i < argc; i++)
         command.append(argv[i]).append(" ");
 
-    if (!ArgumentParser::Parse(command, analyse))
+    if (ArgumentParser::Parse(command, analyse))
+    {
+        analyse.Run();
+    }
+    else
     {
         cout                                                                                            << endl;
         cout << "Format de la commande non valide..."                                                   << endl;

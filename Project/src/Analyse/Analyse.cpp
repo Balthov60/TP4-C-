@@ -24,12 +24,18 @@ using namespace std;
 //----------------------------------------------------- Méthodes publiques
 
 void Analyse::Run()
-//Algorithme :
-//
 {
     while(analyseNextLog());
     generateOrderedNodeCounterMap();
+    if (generateGraph)
+    {
+        if (GraphVizWriter::Write(graphMapper, graphPath))
+            cout << "Le Fichier WizGraph a bien été généré." << endl;
+        else
+            cout << "Le Fichier WizGraph n'a pas pu être généré." << endl;
+    }
     displayResult();
+
 }
 
 
@@ -38,8 +44,6 @@ void Analyse::Run()
 //-------------------------------------------- Constructeurs - destructeur
 
 Analyse::Analyse():hour(-1), excludeResourcesFile(false), generateGraph(false)
-// Algorithme :
-//
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Analyse>" << endl;
@@ -56,7 +60,6 @@ Analyse::~Analyse()
 #endif
 } //----- Fin de ~Analyse
 
-
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées
 bool Analyse::analyseNextLog()
@@ -68,75 +71,69 @@ bool Analyse::analyseNextLog()
 
     if (hitPtr)
     {
-
-        if ( (hour==-1 || (hitPtr->getDatetime().GetHour() == hour))
-                && (!excludeResourcesFile || (excludeResourcesFile && !hitPtr->isRelatedToResourceFile()))){
-
+        if ((hour == -1 || (hitPtr->getDatetime().GetHour() == hour))
+                && (!excludeResourcesFile || (excludeResourcesFile && !hitPtr->isRelatedToResourceFile())))
+        {
             string url = hitPtr->getRequest().getUrl();
 
             //Register hits info in node counter map
             auto nodeCounterResult = nodeCounterMap.find(url);
-            if (nodeCounterResult != nodeCounterMap.end()) {
+
+            if (nodeCounterResult != nodeCounterMap.end())
+            {
                 (nodeCounterResult->second)++;
-            } else {
-                nodeCounterMap.insert({url,1});
+            }
+            else
+            {
+                nodeCounterMap.insert({url, 1});
                 nodeCounterResult = nodeCounterMap.find(url);
             }
 
-            //If needed, adding information in graph mapper
-            if (generateGraph){
+            if (generateGraph)
+            {
                 string referer = hitPtr->getReferer();
                 const string * ptrToUrl = &nodeCounterResult->first;
-                auto graphMapperResult = graphMapper.find(pair<const string * , string>(ptrToUrl,referer));
-                if (graphMapperResult != graphMapper.end()){
+
+                auto graphMapperResult = graphMapper.find(pair<const string *, string>(ptrToUrl, referer));
+                if (graphMapperResult != graphMapper.end())
+                {
                     (graphMapperResult->second)++;
-                } else {
+                }
+                else
+                {
                     graphMapper.insert({pair<const string *,string>(ptrToUrl,referer),1});
                 }
             }
         }
         return true;
-    } else {
+    }
+    else
+    {
         return false;
     }
-} //---- Fin de analyseNextLog
+}
 
 void Analyse::generateOrderedNodeCounterMap()
-//Algorithme :
-//
 {
-    unordered_map<string,unsigned int>::iterator uMapIterator;
-    const string * ptrToUrl;
-    for(uMapIterator = nodeCounterMap.begin(); uMapIterator != nodeCounterMap.end(); uMapIterator++){
-        ptrToUrl = &uMapIterator->first;
-        orderedNodeCounterMap.insert({uMapIterator->second,ptrToUrl});
+    for(auto object : nodeCounterMap)
+    {
+        orderedNodeCounterMap.insert({object.second, &(object.first)});
     }
-} // ---- Fin de generateOrderedNodeCounterMap
-
-void Analyse::generateGraphMapper()
-//Algorithme :
-//
-{
-
-} // ---- Fin de generateGraphMapper
+}
 
 void Analyse::displayResult()
-//Algorithme :
-//
 {
-    multimap<unsigned int, const string *>::reverse_iterator reverseIterator;
-    unsigned int i=1;
+    unsigned int i = 1;
 
-    for (reverseIterator = orderedNodeCounterMap.rbegin(); reverseIterator != orderedNodeCounterMap.rend() && i<=10; reverseIterator++){
-        cout << i << " - Cible : " << *reverseIterator->second << " : " << reverseIterator->first << " visite";
-        (reverseIterator->first > 1 ? cout << "s"<< endl : cout << endl);
+    for (auto counterMapEntry : orderedNodeCounterMap)
+    {
+        cout << i << " - Cible : " << counterMapEntry.second << " : " << counterMapEntry.first << " visite(s)";
         i++;
     }
 
-    unordered_map<pair<const string *,string>,unsigned int,pairhash>::iterator it;
-
-    for (it = graphMapper.begin() ; it != graphMapper.cend() ; it++){
-        cout << "From " << it->first.second << " to " << *(it->first.first) << " : " << it->second << " fois." << endl;
+    for (auto grahMapperEntry : graphMapper)
+    {
+        cout << "From " << grahMapperEntry.first.second << " to " << *(grahMapperEntry.first.first) << " : " << grahMapperEntry.second << " fois." << endl;
     }
 
-} // ---- Fin de display result
+}

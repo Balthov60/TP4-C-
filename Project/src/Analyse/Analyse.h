@@ -14,9 +14,7 @@
 
 #include "../GraphVizWriter/GraphVizWriter.h"
 #include "../LogReader/LogReader.h"
-#include <string>
-#include <unordered_map>
-#include <map>
+
 #include <utility>
 
 using namespace std;
@@ -45,23 +43,23 @@ public:
 
     void SetGraph(const string & graphPath)
     {
-        generateGraph = true;
-        graph = graphPath;
+        this->generateGraph = true;
+        this->graphPath = graphPath;
     }
 
-    void SetHour(int aHour)
+    void SetHour(int hour)
     {
-        hour = aHour;
+        this->hour = hour;
     }
 
-    void SetExcludeResourcesFile(bool excludeResources)
+    void SetExcludeResourcesFile(bool excludeResourcesFile)
     {
-        excludeResourcesFile = excludeResources;
+        this->excludeResourcesFile = excludeResourcesFile;
     }
 
-    void SetLogReader(LogReader * logReaderPtr)
+    void SetLogReader(LogReader * logReader)
     {
-        logReader = logReaderPtr;
+        this->logReader = logReader;
     }
 
 
@@ -113,7 +111,7 @@ protected:
 
 
 //----------------------------------------------------- Attributs protégés
-    string graph;
+    string graphPath;
     int hour;
     bool excludeResourcesFile;
     bool generateGraph;
@@ -121,7 +119,7 @@ protected:
 
     GraphMapper graphMapper;
     unordered_map<string, unsigned int> nodeCounterMap;
-    multimap<unsigned int, string *> orderedNodeCounterMap;
+    multimap<unsigned int, const string *> orderedNodeCounterMap;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

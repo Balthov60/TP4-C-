@@ -12,23 +12,37 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 //------------------------------------------------------ Include personnel
 #include "GraphVizWriter.h"
 
 using namespace std;
-//------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type GraphVizWriter::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
-//------------------------------------------------------------------ PRIVE
+bool GraphVizWriter::Write(GraphMapper &graphMapper, string &path)
+{
+    ofstream stream(path);
+    if (!stream.good())
+        return false;
 
-//----------------------------------------------------- Méthodes protégées
+    stream << "diagraph {" << endl;
 
+    for (auto &it : graphMapper)
+    {
+        stream << it.first.first << ";" << endl;
+    }
+
+    for (auto &it : graphMapper)
+    {
+        stream << it.first.first << " -> " << it.first.second << " [label=\"" << it.second << "\"];" << endl;
+    }
+
+    stream << "}" << endl;
+
+    return true;
+}

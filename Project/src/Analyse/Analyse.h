@@ -43,11 +43,6 @@ public:
     // Contrat :
     //
 
-    void SetFile(const string & filePath)
-    {
-        file = filePath;
-    }
-
     void SetGraph(const string & graphPath)
     {
         generateGraph = true;
@@ -118,7 +113,6 @@ protected:
 
 
 //----------------------------------------------------- Attributs protégés
-    string file;
     string graph;
     int hour;
     bool excludeResourcesFile;

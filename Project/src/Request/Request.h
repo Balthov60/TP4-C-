@@ -70,6 +70,7 @@ protected:
 //----------------------------------------------------- Attributs protégés
     string type;
     string url;
+    string urlGetArgs;
     string protocol;
 };
 

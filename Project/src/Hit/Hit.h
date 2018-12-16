@@ -18,7 +18,7 @@
 
 using namespace std;
 //------------------------------------------------------------- Constantes
-
+const string SERVER_URL = "http://intranet-if.insa-lyon.fr";
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
@@ -62,12 +62,18 @@ public:
         return dataQty;
     }
 
-    const string & getReferer() const {
-        return referer;
-    }
+    string getReferer() const;
+    //Mode d'empoi :
+    //
+    // Contrat :
+    //
 
     const string & getBrowserInfo() const {
         return browserInfo;
+    }
+
+    bool isRelatedToResourceFile() const {
+     return relatedToResourceFile;
     }
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -96,10 +102,17 @@ public:
     // Contrat :
     //
 
+
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
+    bool checkRelatedToResourceFile(const string & filePath);
+    //Mode d'emploi:
+    //
+    // Contrat :
+    //
+
 
 //----------------------------------------------------- Attributs protégés
     string ip;
@@ -113,7 +126,11 @@ protected:
     unsigned int dataQty;
 
     string referer;
+    string refererGetArgs;
+
     string browserInfo;
+
+    bool relatedToResourceFile;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Hit>

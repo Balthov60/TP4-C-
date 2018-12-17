@@ -18,7 +18,14 @@
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+enum PARSE_RESULTS {
+    GOOD,
+    FILE_NO_OVERRIDE,
+    FILE_NOT_FOUND,
+    PARSING_ERROR,
+    INVALID_VALUE,
 
+};
 //------------------------------------------------------------------------
 // Rôle de la classe <ArgumentParser>
 //
@@ -33,7 +40,7 @@ class ArgumentParser
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    static bool Parse(string &args, Analyse &analyse);
+    static PARSE_RESULTS Parse(string &args, Analyse &analyse);
     // Mode d'emploi :
     // Vérifie que les arguments sont bien formatté et configurer l'analyse passé en paramètre.
     //

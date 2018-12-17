@@ -29,23 +29,24 @@ const regex ArgumentParser::logPathArgRegex   = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------- Méthodes publiques
 
-bool ArgumentParser::Parse(string &args, Analyse &analyse) //TODO add another return type if file don't want to be override
+PARSE_RESULTS ArgumentParser::Parse(string &args, Analyse &analyse) //TODO add another return type if file don't want to be override
 {
     if (!regex_match(args, commandRegex))
-        return false;
-
-    smatch match;
+        return PARSING_ERROR;
 
     if (!testTimeArgs(args, analyse))
-        return false;
+        return INVALID_VALUE;
 
     if (!testGraphArgs(args, analyse))
-        return false;
+        return FILE_NO_OVERRIDE;
 
     if (args.find("-e") != string::npos)
         analyse.SetExcludeResourcesFile(true);
 
-    return testLogArgs(args, analyse);
+    if (!testLogArgs(args, analyse))
+        return FILE_NOT_FOUND;
+
+    return GOOD;
 }
 
 //------------------------------------------------------------------ PRIVE
@@ -58,13 +59,13 @@ bool ArgumentParser::testTimeArgs(string &args, Analyse &analyse)
 
     if (regex_search(args, match, timeArgRegex))
     {
-        string args = match[0];
-        size_t pos = args.find(' ');
+        string arg = match[0];
+        size_t pos = arg.find(' ');
         int hour;
 
         try
         {
-            hour = stoi(args.substr(pos));
+            hour = stoi(arg.substr(pos));
         }
         catch(exception & e)
         {
@@ -103,6 +104,7 @@ bool ArgumentParser::testGraphArgs(string &args, Analyse &analyse)
             }
             else
             {
+                cout << "Analyse de log annulé, veuillez choisir un autre fichier pour le graph ou désactiver cette option.";
                 return false;
             }
         }

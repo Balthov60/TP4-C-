@@ -6,7 +6,7 @@
     e-mail               : ...@insa-lyon.fr
 *************************************************************************/
 
-//---------- Réalisation de la classe <Analyse> (fichier Analyse.cpp) ------------
+//------ Réalisation de la classe <Analyse> (fichier Analyse.cpp) --------
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -26,7 +26,9 @@ using namespace std;
 void Analyse::Run()
 {
     while(analyseNextLog());
+
     generateOrderedNodeCounterMap();
+
     if (generateGraph)
     {
         if (GraphVizWriter::Write(graphMapper, graphPath))
@@ -115,9 +117,9 @@ bool Analyse::analyseNextLog()
 
 void Analyse::generateOrderedNodeCounterMap()
 {
-    for(auto object : nodeCounterMap)
+    for (auto it = nodeCounterMap.begin(); it != nodeCounterMap.end(); it++)
     {
-        orderedNodeCounterMap.insert({object.second, &(object.first)});
+        orderedNodeCounterMap.insert({it->second, &(it->first)});
     }
 }
 

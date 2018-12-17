@@ -125,15 +125,10 @@ void Analyse::displayResult()
 {
     unsigned int i = 1;
 
-    for (auto counterMapEntry : orderedNodeCounterMap)
+    for (auto it = orderedNodeCounterMap.rbegin(); it != orderedNodeCounterMap.rend() && i <= 10; it++)
     {
-        cout << i << " - Cible : " << counterMapEntry.second << " : " << counterMapEntry.first << " visite(s)";
+        cout << i << " - Cible : " << *(*it).second << " : " << (*it).first << " visite(s)" << endl;
         i++;
-    }
-
-    for (auto grahMapperEntry : graphMapper)
-    {
-        cout << "From " << grahMapperEntry.first.second << " to " << *(grahMapperEntry.first.first) << " : " << grahMapperEntry.second << " fois." << endl;
     }
 
 }

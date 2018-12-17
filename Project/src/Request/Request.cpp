@@ -12,6 +12,7 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <sstream>
 
 //------------------------------------------------------ Include personnel
 #include "Request.h"
@@ -27,14 +28,23 @@ const char LONG_STRING_SEPARATOR = '"';
 istream & operator>>(istream & is, Request & request)
 {
     string temp;
+    string urlAndProtocolString;
     int argsGETpos;
+    int lastSpacePos;
+
 
     is.seekg(2, ios_base::cur);
 
+
     getline(is, request.type, BASIC_SEPARATOR);
 
-    //dealing with url
-    getline(is, temp, BASIC_SEPARATOR);
+    //dealing with url and protocol
+    getline(is,urlAndProtocolString, LONG_STRING_SEPARATOR);
+    lastSpacePos = urlAndProtocolString.rfind(" ");
+    request.protocol = urlAndProtocolString.substr(lastSpacePos+1,string::npos);
+    temp = urlAndProtocolString.substr(0,lastSpacePos);
+
+
     argsGETpos = temp.find('?');
     if (argsGETpos != -1 ){
         request.url = temp.substr(0,argsGETpos);
@@ -43,7 +53,6 @@ istream & operator>>(istream & is, Request & request)
         request.url = temp;
     }
 
-    getline(is, request.protocol, LONG_STRING_SEPARATOR);
 
     is.seekg(1, ios_base::cur);
 

@@ -95,7 +95,8 @@ bool Analyse::analyseNextLog()
             {
                 string referer = hitPtr->getReferer();
                 const string * ptrToUrl = &nodeCounterResultUrl->first;
-                
+
+                //adding referer url to nodeCounterMap to register its string if it doesn't already exist
                 auto nodeCounterResultReferer = nodeCounterMap.find(referer);
 
                 if (nodeCounterResultReferer == nodeCounterMap.end()){
@@ -105,6 +106,7 @@ bool Analyse::analyseNextLog()
 
                 const string * ptrToReferer = &nodeCounterResultReferer->first;
 
+                //adding the pair of pointer to target URL and referer URL in graphMapper map
                 auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(ptrToUrl, ptrToReferer));
                 if (graphMapperResult != graphMapper.end())
                 {

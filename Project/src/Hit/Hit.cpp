@@ -22,8 +22,8 @@ using namespace std;
 const char BASIC_SEPARATOR = ' ';
 const char LONG_STRING_SEPARATOR = '"';
 
-const unsigned int EXTENSION_NUMBER = 8;
-const char * const RESOURCE_EXTENSION_LIST[] = {"jpg", "jpeg", "bmp", "tiff", "png", "gif", "css", "js"};
+const unsigned int EXTENSION_NUMBER = 9;
+const char * const RESOURCE_EXTENSION_LIST[] = {"jpg", "jpeg", "bmp", "tiff", "png", "gif", "css", "js", "ico"};
 
 //----------------------------------------------------------------- PUBLIC
 
@@ -50,7 +50,7 @@ istream & operator>>(istream & is, Hit & hit)
 
     //Dealing with date and time
     is >> hit.datetime;
-    //Dealing with request infos
+    //Dealing with request info
     is >> hit.request;
 
     getline(is, temp, BASIC_SEPARATOR);

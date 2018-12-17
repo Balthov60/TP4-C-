@@ -29,7 +29,7 @@ public:
     }
 };
 
-typedef unordered_map<pair<const string *, string>, unsigned int, PairHash> GraphMapper;
+typedef unordered_map<pair<const string *, const string *>, unsigned int, PairHash> GraphMapper;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <GraphVizWriter>

@@ -79,31 +79,40 @@ bool Analyse::analyseNextLog()
             string url = hitPtr->getRequest().getUrl();
 
             //Register hits info in node counter map
-            auto nodeCounterResult = nodeCounterMap.find(url);
+            auto nodeCounterResultUrl = nodeCounterMap.find(url);
 
-            if (nodeCounterResult != nodeCounterMap.end())
+            if (nodeCounterResultUrl != nodeCounterMap.end())
             {
-                (nodeCounterResult->second)++;
+                (nodeCounterResultUrl->second)++;
             }
             else
             {
                 nodeCounterMap.insert({url, 1});
-                nodeCounterResult = nodeCounterMap.find(url);
+                nodeCounterResultUrl = nodeCounterMap.find(url);
             }
 
             if (generateGraph)
             {
                 string referer = hitPtr->getReferer();
-                const string * ptrToUrl = &nodeCounterResult->first;
+                const string * ptrToUrl = &nodeCounterResultUrl->first;
+                
+                auto nodeCounterResultReferer = nodeCounterMap.find(referer);
 
-                auto graphMapperResult = graphMapper.find(pair<const string *, string>(ptrToUrl, referer));
+                if (nodeCounterResultReferer == nodeCounterMap.end()){
+                    nodeCounterMap.insert({referer, 0});
+                    nodeCounterResultUrl = nodeCounterMap.find(referer);
+                }
+
+                const string * ptrToReferer = &nodeCounterResultReferer->first;
+
+                auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(ptrToUrl, ptrToReferer));
                 if (graphMapperResult != graphMapper.end())
                 {
                     (graphMapperResult->second)++;
                 }
                 else
                 {
-                    graphMapper.insert({pair<const string *,string>(ptrToUrl,referer),1});
+                    graphMapper.insert({pair<const string *,const string *>(ptrToUrl,ptrToReferer),1});
                 }
             }
         }

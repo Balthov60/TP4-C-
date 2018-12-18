@@ -92,7 +92,9 @@ protected:
     //
     // Contrat :
     //
-    NodeCounter::iterator updateNodeCounterMapWith(const string &url);
+    const string * updateNodeCounterMapWithUrl(const string &url);
+    const string * getRefererStringInNodeCounterMap(const string &referer);
+    void updateGraphMapper(const string * referer, const string * url);
 
     void generateOrderedNodeCounterMap();
     // Mode d'emploi :

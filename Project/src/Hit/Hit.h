@@ -63,10 +63,8 @@ public:
     }
 
     string getReferer() const;
-    //Mode d'empoi :
-    //
-    // Contrat :
-    //
+
+    string getRefererGetArgs() const;
 
     const string & getBrowserInfo() const {
         return browserInfo;

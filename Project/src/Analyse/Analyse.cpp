@@ -63,6 +63,7 @@ Analyse::~Analyse()
 } //----- Fin de ~Analyse
 
 //------------------------------------------------------------------ PRIVE
+
 //----------------------------------------------------- Méthodes protégées
 bool Analyse::analyseNextLog()
 {
@@ -73,41 +74,23 @@ bool Analyse::analyseNextLog()
     {
         if ((hour == -1 || (hitPtr->getDatetime().GetHour() == hour)) && (!excludeResourcesFile || !hitPtr->isRelatedToResourceFile()))
         {
-            auto node = updateNodeCounterMapWith(hitPtr->getRequest().getUrl());
+            const string * url = updateNodeCounterMapWithUrl(hitPtr->getRequest().getUrl());
 
             if (generateGraph)
             {
-                const string * ptrToUrl = &(node->first);
+                const string * referer = getRefererStringInNodeCounterMap(hitPtr->getReferer());
+                updateGraphMapper(referer, url);
 
-                //adding referer url to nodeCounter to register its string if it doesn't already exist
-                string referer = hitPtr->getReferer();
-                auto nodeCounterResultReferer = nodeCounter.find(referer);
-
-                if (nodeCounterResultReferer == nodeCounter.end()) {
-                    nodeCounter.insert({referer, 0});
-                }
-                const string * ptrToReferer = &nodeCounterResultReferer->first;
-
-                //adding the pair of pointer to target URL and referer URL in graphMapper map
-                auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(ptrToReferer, ptrToUrl));
-                if (graphMapperResult != graphMapper.end())
-                {
-                    (graphMapperResult->second)++;
-                }
-                else
-                {
-                    graphMapper.insert({pair<const string *,const string *>(ptrToReferer, ptrToUrl), 1});
-                }
+                delete hitPtr;
             }
         }
+        
         return true;
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
-NodeCounter::iterator Analyse::updateNodeCounterMapWith(const string &url)
+const string * Analyse::updateNodeCounterMapWithUrl(const string &url)
 {
     auto nodeCounterResultUrl = nodeCounter.find(url);
 
@@ -121,14 +104,37 @@ NodeCounter::iterator Analyse::updateNodeCounterMapWith(const string &url)
         nodeCounterResultUrl = nodeCounter.find(url);
     }
 
-    return nodeCounterResultUrl;
+    return &(nodeCounterResultUrl->first);
+}
+const string * Analyse::getRefererStringInNodeCounterMap(const string &referer)
+{
+    auto nodeReferer = nodeCounter.find(referer);
+
+    if (nodeReferer == nodeCounter.end()) {
+        nodeReferer = nodeCounter.insert({referer, 0}).first;
+    }
+    const string * ptrToReferer = &(nodeReferer->first);
+
+    return &(nodeReferer->first);
+}
+void Analyse::updateGraphMapper(const string * referer, const string * url)
+{
+    auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(referer, url));
+    if (graphMapperResult != graphMapper.end())
+    {
+        (graphMapperResult->second)++;
+    }
+    else
+    {
+        graphMapper.insert({pair<const string *,const string *>(referer, url), 1});
+    }
 }
 
 void Analyse::generateOrderedNodeCounterMap()
 {
-    for (auto it = nodeCounter.begin(); it != nodeCounter.end(); it++)
+    for (auto &it : nodeCounter)
     {
-        orderedNodeCounterMap.insert({it->second, &(it->first)});
+        orderedNodeCounterMap.insert({it.second, &(it.first)});
     }
 }
 

@@ -38,6 +38,11 @@ string Hit::getReferer() const
     }
 }
 
+string Hit::getRefererGetArgs() const
+{
+    return refererGetArgs;
+}
+
 //------------------------------------------------- Surcharge d'opérateurs
 istream & operator>>(istream & is, Hit & hit)
 {

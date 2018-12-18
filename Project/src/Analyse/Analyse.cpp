@@ -31,7 +31,7 @@ void Analyse::Run()
 
     if (generateGraph)
     {
-        if (GraphVizWriter::Write(graphMapper, graphPath))
+        if (GraphVizWriter::Write(nodeCounterMap, graphMapper, graphPath))
             cout << "Le Fichier WizGraph a bien été généré." << endl;
         else
             cout << "Le Fichier WizGraph n'a pas pu être généré." << endl;
@@ -99,7 +99,7 @@ bool Analyse::analyseNextLog()
                 //adding referer url to nodeCounterMap to register its string if it doesn't already exist
                 auto nodeCounterResultReferer = nodeCounterMap.find(referer);
 
-                if (nodeCounterResultReferer == nodeCounterMap.end()){
+                if (nodeCounterResultReferer == nodeCounterMap.end()) {
                     nodeCounterMap.insert({referer, 0});
                     nodeCounterResultUrl = nodeCounterMap.find(referer);
                 }
@@ -107,14 +107,14 @@ bool Analyse::analyseNextLog()
                 const string * ptrToReferer = &nodeCounterResultReferer->first;
 
                 //adding the pair of pointer to target URL and referer URL in graphMapper map
-                auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(ptrToUrl, ptrToReferer));
+                auto graphMapperResult = graphMapper.find(pair<const string *, const string *>(ptrToReferer, ptrToUrl));
                 if (graphMapperResult != graphMapper.end())
                 {
                     (graphMapperResult->second)++;
                 }
                 else
                 {
-                    graphMapper.insert({pair<const string *,const string *>(ptrToUrl,ptrToReferer),1});
+                    graphMapper.insert({pair<const string *,const string *>(ptrToReferer, ptrToUrl), 1});
                 }
             }
         }

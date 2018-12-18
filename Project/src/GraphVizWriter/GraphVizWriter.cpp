@@ -24,22 +24,22 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-bool GraphVizWriter::Write(GraphMapper &graphMapper, string &path)
+bool GraphVizWriter::Write(unordered_map<string, unsigned int> &nodeCounterMap, GraphMapper &graphMapper, string &path)
 {
     ofstream stream(path);
     if (!stream.good())
         return false;
 
-    stream << "diagraph {" << endl;
+    stream << "digraph {" << endl;
 
-    for (auto &it : graphMapper)
+    for (auto &it : nodeCounterMap)
     {
-        stream << *(it.first.first) << ";" << endl;
+        stream << "ID" << &it.first << " [label=\"" << it.first << "\"];" << endl;
     }
 
     for (auto &it : graphMapper)
     {
-        stream << *(it.first.first) << " -> " << it.first.second << " [label=\"" << it.second << "\"];" << endl;
+        stream << "ID" << it.first.first << " -> " << "ID" << it.first.second << " [label=\"" << it.second << "\"];" << endl;
     }
 
     stream << "}" << endl;

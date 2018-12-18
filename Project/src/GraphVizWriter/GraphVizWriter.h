@@ -46,7 +46,7 @@ class GraphVizWriter
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    static bool Write(GraphMapper &graphMapper, string &path);
+    static bool Write(unordered_map<string, unsigned int> &nodeCounterMap, GraphMapper &graphMapper, string &path);
     // Mode d'emploi:
     // Crée un fichier GraphViz au chemin path depuis l'objet graphMapper.
     //

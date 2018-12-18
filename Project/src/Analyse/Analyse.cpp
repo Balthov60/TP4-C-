@@ -31,7 +31,7 @@ void Analyse::Run()
 
     if (generateGraph)
     {
-        if (GraphVizWriter::Write(nodeCounterMap, graphMapper, graphPath))
+        if (GraphVizWriter::Write(nodeCounter, graphMapper, graphPath))
             cout << "Le Fichier WizGraph a bien été généré." << endl;
         else
             cout << "Le Fichier WizGraph n'a pas pu être généré." << endl;
@@ -65,45 +65,27 @@ Analyse::~Analyse()
 //------------------------------------------------------------------ PRIVE
 //----------------------------------------------------- Méthodes protégées
 bool Analyse::analyseNextLog()
-//Algorithme :
-//
 {
     Hit * hitPtr;
     hitPtr = logReader->ReadNext();
 
     if (hitPtr)
     {
-        if ((hour == -1 || (hitPtr->getDatetime().GetHour() == hour))
-                && (!excludeResourcesFile || (excludeResourcesFile && !hitPtr->isRelatedToResourceFile())))
+        if ((hour == -1 || (hitPtr->getDatetime().GetHour() == hour)) && (!excludeResourcesFile || !hitPtr->isRelatedToResourceFile()))
         {
-            string url = hitPtr->getRequest().getUrl();
-
-            //Register hits info in node counter map
-            auto nodeCounterResultUrl = nodeCounterMap.find(url);
-
-            if (nodeCounterResultUrl != nodeCounterMap.end())
-            {
-                (nodeCounterResultUrl->second)++;
-            }
-            else
-            {
-                nodeCounterMap.insert({url, 1});
-                nodeCounterResultUrl = nodeCounterMap.find(url);
-            }
+            auto node = updateNodeCounterMapWith(hitPtr->getRequest().getUrl());
 
             if (generateGraph)
             {
+                const string * ptrToUrl = &(node->first);
+
+                //adding referer url to nodeCounter to register its string if it doesn't already exist
                 string referer = hitPtr->getReferer();
-                const string * ptrToUrl = &nodeCounterResultUrl->first;
+                auto nodeCounterResultReferer = nodeCounter.find(referer);
 
-                //adding referer url to nodeCounterMap to register its string if it doesn't already exist
-                auto nodeCounterResultReferer = nodeCounterMap.find(referer);
-
-                if (nodeCounterResultReferer == nodeCounterMap.end()) {
-                    nodeCounterMap.insert({referer, 0});
-                    nodeCounterResultUrl = nodeCounterMap.find(referer);
+                if (nodeCounterResultReferer == nodeCounter.end()) {
+                    nodeCounter.insert({referer, 0});
                 }
-
                 const string * ptrToReferer = &nodeCounterResultReferer->first;
 
                 //adding the pair of pointer to target URL and referer URL in graphMapper map
@@ -125,10 +107,26 @@ bool Analyse::analyseNextLog()
         return false;
     }
 }
+NodeCounter::iterator Analyse::updateNodeCounterMapWith(const string &url)
+{
+    auto nodeCounterResultUrl = nodeCounter.find(url);
+
+    if (nodeCounterResultUrl != nodeCounter.end())
+    {
+        (nodeCounterResultUrl->second)++;
+    }
+    else
+    {
+        nodeCounter.insert({url, 1});
+        nodeCounterResultUrl = nodeCounter.find(url);
+    }
+
+    return nodeCounterResultUrl;
+}
 
 void Analyse::generateOrderedNodeCounterMap()
 {
-    for (auto it = nodeCounterMap.begin(); it != nodeCounterMap.end(); it++)
+    for (auto it = nodeCounter.begin(); it != nodeCounter.end(); it++)
     {
         orderedNodeCounterMap.insert({it->second, &(it->first)});
     }

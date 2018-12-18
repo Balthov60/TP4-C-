@@ -23,6 +23,8 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 
+typedef unordered_map<string, unsigned int> NodeCounter;
+
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
 //
@@ -90,6 +92,7 @@ protected:
     //
     // Contrat :
     //
+    NodeCounter::iterator updateNodeCounterMapWith(const string &url);
 
     void generateOrderedNodeCounterMap();
     // Mode d'emploi :
@@ -115,10 +118,11 @@ protected:
     int hour;
     bool excludeResourcesFile;
     bool generateGraph;
+
     LogReader * logReader;
 
     GraphMapper graphMapper;
-    unordered_map<string, unsigned int> nodeCounterMap;
+    NodeCounter nodeCounter;
     multimap<unsigned int, const string *> orderedNodeCounterMap;
 };
 

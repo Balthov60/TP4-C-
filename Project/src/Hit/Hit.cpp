@@ -91,9 +91,9 @@ void Hit::setDataQty(string &temp)
 
 void Hit::setRefererInfos(string &temp)
 {
-    unsigned long argsGetpos = temp.find('?');
+    unsigned long argsGetpos = temp.find(';');
     if (argsGetpos == string::npos)
-        argsGetpos = temp.find(';');
+        argsGetpos = temp.find_first_of('?');
 
     if (argsGetpos != string::npos)
     {
@@ -118,7 +118,7 @@ bool Hit::checkIfHitIsRelatedToAResourceFile(const string &filePath)
        string extension = filePath.substr(dotPosition + 1);
        for (auto &i : RESOURCE_EXTENSION_LIST)
        {
-           if (extension != i)
+           if (extension == i)
                return true;
        }
     }

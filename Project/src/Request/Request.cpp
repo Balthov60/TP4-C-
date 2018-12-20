@@ -54,9 +54,9 @@ istream & operator>>(istream & is, Request & request)
 
 void Request::setUrlInfos(string &temp) // TODO: Create new Object for URL to remove code redundancy with Hit Class
 {
-    unsigned long argsGetpos = temp.find('?');
+    unsigned long argsGetpos = temp.find(';');
     if (argsGetpos == string::npos)
-        argsGetpos = temp.find(';');
+        argsGetpos = temp.find_first_of('?');
 
     if (argsGetpos != string::npos)
     {

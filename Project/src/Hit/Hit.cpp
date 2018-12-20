@@ -104,6 +104,9 @@ void Hit::setRefererInfos(string &temp)
     {
         referer = temp;
     }
+
+    if (referer.back() == '/')
+        referer.erase(referer.end() - 1, referer.end());
 }
 
 bool Hit::checkIfHitIsRelatedToAResourceFile(const string &filePath)

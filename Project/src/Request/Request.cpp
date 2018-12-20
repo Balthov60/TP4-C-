@@ -67,4 +67,7 @@ void Request::setUrlInfos(string &temp) // TODO: Create new Object for URL to re
     {
         url = temp;
     }
+
+    if (url.back() == '/' && url.size() > 1)
+        url.erase(url.end() - 1, url.end());
 }

@@ -12,6 +12,7 @@
 
 //-------------------------------------------------------- Include système
 #include <iostream>
+#include <iomanip>
 
 //------------------------------------------------------ Include personnel
 #include "Analyse.h"
@@ -130,7 +131,7 @@ void Analyse::displayResult()
 
     for (auto it = orderedNodeCounter.rbegin(); it != orderedNodeCounter.rend() && i <= 10; it++)
     {
-        cout << i << " - Cible : " << *(*it).second << " : " << (*it).first << " visite(s)" << endl;
+        cout << setw(2) << i << " - Cible : " << *(*it).second << " : " << (*it).first << " visite(s)" << endl;
         i++;
     }
 }

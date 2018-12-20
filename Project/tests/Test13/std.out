@@ -1,0 +1,8 @@
+
+Format de la commande non valide...
+
+Utilisation de ./analog [-e|-g|-t] <path>
+   <path>        : chemin vers un fichier d’extension .txt ou .log.
+   -e            : Exclut les documents de type image, css ou javascript.
+   -g <path.dot> : Genère le fichier <path.dot> au format GraphViz du graphe analysé.
+   -t [0-23]     : Prend en compte que les hits dans le créneau horaire [t, t+1].

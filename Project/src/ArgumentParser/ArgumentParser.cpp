@@ -115,7 +115,11 @@ bool ArgumentParser::testGraphArgs(string &args, Analyse &analyse)
         if (fileCanBeCreatedStream.good())
         {
             analyse.SetGraph(path);
+            return true;
         }
+
+        cout << "Le chemin spécifié pour la création du fichier .dot n'est pas valide..." << endl;
+        return false;
     }
 
     return true;

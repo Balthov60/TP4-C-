@@ -48,20 +48,15 @@ public:
 
     static bool Write(unordered_map<string, unsigned int> &nodeCounterMap, GraphMapper &graphMapper, string &path);
     // Mode d'emploi:
-    // Crée un fichier GraphViz au chemin path depuis l'objet graphMapper.
+    // Create file at path from nodeCounterMap & graphMapper
     //
     // Contrat:
-    // path pointe sur un fichier valide.
+    // path must be a valid file path.
     //
 
 //----------------------------------------------------------- Constructeur
 
     GraphVizWriter() = delete;
-
-//------------------------------------------------------------------ PRIVE
-
-protected:
-//----------------------------------------------------- Méthodes protégées
 
 };
 

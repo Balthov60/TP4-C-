@@ -23,24 +23,19 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-
 Hit * LogReader::ReadNext()
-//Algorithme :
-//
 {
     if (stream.is_open() && !stream.eof())
     {
-      Hit * hit = new Hit;
-      stream >> *hit;
+        Hit * hit = new Hit;
+        stream >> *hit;
 
-      return hit;
+        return hit;
     }
     return nullptr;
 }
 
 bool LogReader::TrackNewFile(const string &path)
-//Algorithme :
-//
 {
     CloseFileStream();
 
@@ -72,6 +67,7 @@ LogReader::~LogReader()
 #ifdef MAP
     cout << "Appel au constructeur de <LogReader>" << endl;
 #endif
+
     CloseFileStream();
 } //----- Fin de ~LogReader
 

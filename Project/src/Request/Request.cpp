@@ -11,48 +11,37 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
+
 #include <iostream>
-#include <sstream>
 
 //------------------------------------------------------ Include personnel
+
 #include "Request.h"
 
 using namespace std;
+
 //------------------------------------------------------------- Constantes
-const char BASIC_SEPARATOR = ' ';
-const char LONG_STRING_SEPARATOR = '"';
+
+const char BASIC_SEPARATOR          = ' ';
+const char LONG_STRING_SEPARATOR    = '"';
+
 //----------------------------------------------------------------- PUBLIC
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 istream & operator>>(istream & is, Request & request)
 {
-    string temp;
-    string urlAndProtocolString;
-    int argsGETpos;
-    int lastSpacePos;
-
-
+    string temp, urlTemp;
     is.seekg(2, ios_base::cur);
-
 
     getline(is, request.type, BASIC_SEPARATOR);
 
-    //dealing with url and protocol
-    getline(is,urlAndProtocolString, LONG_STRING_SEPARATOR);
-    lastSpacePos = urlAndProtocolString.rfind(" ");
-    request.protocol = urlAndProtocolString.substr(lastSpacePos+1,string::npos);
-    temp = urlAndProtocolString.substr(0,lastSpacePos);
+    getline(is, temp, LONG_STRING_SEPARATOR);
+    unsigned long lastSpacePos = temp.rfind(' ');
+    request.protocol = temp.substr(lastSpacePos + 1);
 
-
-    argsGETpos = temp.find('?');
-    if (argsGETpos != -1 ){
-        request.url = temp.substr(0,argsGETpos);
-        request.url = temp.substr(argsGETpos+1,string::npos);
-    } else {
-        request.url = temp;
-    }
-
+    temp = temp.substr(0, lastSpacePos);
+    request.setUrlInfos(temp);
 
     is.seekg(1, ios_base::cur);
 
@@ -63,3 +52,19 @@ istream & operator>>(istream & is, Request & request)
 
 //----------------------------------------------------- Méthodes protégées
 
+void Request::setUrlInfos(string &temp) // TODO: Create new Object for URL to remove code redundancy with Hit Class
+{
+    unsigned long argsGetpos = temp.find('?');
+    if (argsGetpos == string::npos)
+        argsGetpos = temp.find(';');
+
+    if (argsGetpos != string::npos)
+    {
+        url = temp.substr(0, argsGetpos);
+        urlGetArgs = temp.substr(argsGetpos + 1);
+    }
+    else
+    {
+        url = temp;
+    }
+}

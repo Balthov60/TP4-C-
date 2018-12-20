@@ -11,10 +11,12 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
+
 #include <iostream>
 #include <string>
 
 //------------------------------------------------------ Include personnel
+
 #include "ArgumentParser.h"
 
 using namespace std;
@@ -29,7 +31,7 @@ const regex ArgumentParser::logPathArgRegex   = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------- Méthodes publiques
 
-PARSE_RESULTS ArgumentParser::Parse(string &args, Analyse &analyse) //TODO add another return type if file don't want to be override
+PARSE_RESULTS ArgumentParser::Parse(string &args, Analyse &analyse)
 {
     if (!regex_match(args, commandRegex))
         return PARSING_ERROR;

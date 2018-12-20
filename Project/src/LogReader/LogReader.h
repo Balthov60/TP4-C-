@@ -37,24 +37,24 @@ public:
 
     Hit * ReadNext();
     // Mode d'emploi :
-    // Lit la prochaine ligne de log.
-    // Renvoi nullptr si le fichier de log est terminée.
-    // Sinon renvoi un objet Hit correspondant au log lu.
+    // Read Next Log from stream.
+    // return nullptr if stream is ended.
+    // else return an instance of the Hit created.
     //
     // Contrat:
     //
 
     bool TrackNewFile(const string & path);
     // Mode d'emploi :
-    // Ferme l'ancien flux et essaye d'en ouvrir un nouveau sur le fichier pointé par "path"
-    // Renvoi true si le fichier est correctement ouvert sinon renvoi false.
+    // Close the old stream and try to open a new one at path
+    // Return true if file opened successfully else return false.
     //
     // Contrat:
     //
 
     void CloseFileStream();
     // Mode d'emploi :
-    // Ferme le flux si il est ouvert.
+    // Close stream if opened.
     //
     // Contrat:
     //
@@ -65,14 +65,14 @@ public:
 
     explicit LogReader(const string & path);
     // Mode d'emploi :
-    // Crée un object LogReader et lui associe un fichier de log.
+    // Instantiate LogReader and open stream at path.
     //
     // Contrat :
     //
 
     virtual ~LogReader();
     // Mode d'emploi :
-    // Ferme le flux du fichier de log.
+    // close istream.
     //
     // Contrat :
     //
@@ -80,9 +80,9 @@ public:
 //------------------------------------------------------------------ PRIVE
 
 protected:
-//----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+
     ifstream stream;
 
 };

@@ -39,6 +39,10 @@ public:
         return url;
     }
 
+    const string & getUrlGetArgs() const {
+        return urlGetArgs;
+    }
+
     const string & getProtocol() const {
         return protocol;
     }
@@ -50,14 +54,14 @@ public:
 //-------------------------------------------- Constructeurs - destructeur
     Request() = default;
     // Mode d'emploi :
-    // Constructeur vide
+    // Empty Constructor
     //
     // Contrat :
     //
 
     virtual ~Request() = default;
     // Mode d'emploi :
-    // Destructeur vide
+    // Empty Destructor
     //
     // Contrat :
     //
@@ -67,7 +71,10 @@ public:
 protected:
 //----------------------------------------------------- Méthodes protégées
 
+    void setUrlInfos(string &temp);
+
 //----------------------------------------------------- Attributs protégés
+
     string type;
     string url;
     string urlGetArgs;

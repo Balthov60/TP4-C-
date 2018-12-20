@@ -24,10 +24,13 @@ using namespace std;
 //------------------------------------------------------------------ Types
 
 typedef unordered_map<string, unsigned int> NodeCounter;
+typedef multimap<unsigned int, const string *> OrderedNodeCounter;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
 //
+// Classe principale de l'application, permet de créer les structures de données
+// utilisé pour créé un top 10 et pour créer le graph.
 //
 //------------------------------------------------------------------------
 
@@ -37,8 +40,10 @@ class Analyse
 
 public:
 //----------------------------------------------------- Méthodes publiques
+
     void Run();
     // Mode d'emploi :
+    // Run Analysis on log, generate graph if asked and display top 10.
     //
     // Contrat :
     //
@@ -64,20 +69,18 @@ public:
         this->logReader = logReader;
     }
 
-
-
-//------------------------------------------------- Surcharge d'opérateurs
-
-
 //-------------------------------------------- Constructeurs - destructeur
-    Analyse ();
+
+    Analyse ():hour(-1), excludeResourcesFile(false), generateGraph(false) {};
     // Mode d'emploi :
+    // default constructor
     //
     // Contrat :
     //
 
-    virtual ~Analyse ( );
+    virtual ~Analyse () = default;
     // Mode d'emploi :
+    // default destructor
     //
     // Contrat :
     //
@@ -85,37 +88,52 @@ public:
 //------------------------------------------------------------------ PRIVE
 
 protected:
+
 //----------------------------------------------------- Méthodes protégées
 
-    bool analyseNextLog();
+    bool analyseNextHit();
     // Mode d'emploi :
+    // Get next Hit and add it to NodeCounter if it match analysis parameters.
     //
     // Contrat :
     //
+
     const string * updateNodeCounterMapWithUrl(const string &url);
+    // Mode d'emploi :
+    // Add an entry or increment NodeCounter
+    //
+    // Contrat :
+    //
     const string * getRefererStringInNodeCounterMap(const string &referer);
+    // Mode d'emploi :
+    // Get Referer String pointer from counter map or insert a new one if it don't exist.
+    //
+    // Contrat :
+    //
+
     void updateGraphMapper(const string * referer, const string * url);
+    // Mode d'emploi :
+    // Add an entry or increment GraphMapper
+    //
+    // Contrat :
+    //
 
     void generateOrderedNodeCounterMap();
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    void generateGraphMapper();
-    // Mode d'emploi :
+    // Generate Ordered Node Counter by inverting nodeCounter Map.
     //
     // Contrat :
     //
 
     void displayResult();
     // Mode d'emploi :
+    // Display a top ten from orderedNodeCounterMap.
     //
     // Contrat :
     //
 
-
 //----------------------------------------------------- Attributs protégés
+
     string graphPath;
     int hour;
     bool excludeResourcesFile;
@@ -125,7 +143,7 @@ protected:
 
     GraphMapper graphMapper;
     NodeCounter nodeCounter;
-    multimap<unsigned int, const string *> orderedNodeCounterMap;
+    OrderedNodeCounter orderedNodeCounter;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

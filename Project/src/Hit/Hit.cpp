@@ -22,96 +22,103 @@ using namespace std;
 const char BASIC_SEPARATOR = ' ';
 const char LONG_STRING_SEPARATOR = '"';
 
-const unsigned int EXTENSION_NUMBER = 9;
 const char * const RESOURCE_EXTENSION_LIST[] = {"jpg", "jpeg", "bmp", "tiff", "png", "gif", "css", "js", "ico"};
 
 //----------------------------------------------------------------- PUBLIC
 
-string Hit::getReferer() const
-//Algorithme :
-//
+string Hit::GetReferer() const
 {
-    if (referer.find(SERVER_URL) != -1) {
+    if (referer.find(SERVER_URL) != -1)
+    {
         return referer.substr(SERVER_URL.length(), string::npos);
-    } else {
+    }
+    else
+    {
         return referer;
     }
 }
 
-string Hit::getRefererGetArgs() const
-{
-    return refererGetArgs;
-}
-
 //------------------------------------------------- Surcharge d'opérateurs
+
 istream & operator>>(istream & is, Hit & hit)
 {
     string temp;
-    int argsGETpos;
 
     getline(is, hit.ip, BASIC_SEPARATOR);
     getline(is, hit.logname, BASIC_SEPARATOR);
     getline(is, hit.authenticatedUser, BASIC_SEPARATOR);
 
-    //Dealing with date and time
     is >> hit.datetime;
-    //Dealing with request info
     is >> hit.request;
 
     getline(is, temp, BASIC_SEPARATOR);
     hit.statusCode = (unsigned int) stoi(temp, nullptr, 10);
 
-    //Dealing with data quantity
     getline(is, temp, BASIC_SEPARATOR);
-    if (temp.c_str()[0] == '-')         //sometimes, field data quantity has '-' char
-    {                                   //thus it's necessary to test it manually to avoid stoi errors
-        hit.dataQty = 0;
-    } else {
-        hit.dataQty = (unsigned int) stoi(temp, nullptr, 10);
-    }
+    hit.setDataQty(temp);
 
-    //Dealing with referer
     is.seekg(1, ios_base::cur);
     getline(is, temp, LONG_STRING_SEPARATOR);
-    argsGETpos = temp.find('?');
-    if (argsGETpos != -1 ){
-        hit.referer = temp.substr(0,argsGETpos);
-        hit.refererGetArgs = temp.substr(argsGETpos+1,string::npos);
-    } else {
-        hit.referer = temp;
-    }
+    hit.setRefererInfos(temp);
 
     is.seekg(2, ios_base::cur);
     getline(is, hit.browserInfo, LONG_STRING_SEPARATOR);
 
-    hit.relatedToResourceFile = hit.checkRelatedToResourceFile(hit.request.getUrl());
+    hit.relatedToResourceFile = hit.checkIfHitIsRelatedToAResourceFile(hit.request.getUrl());
 
-    //getline(is, temp);  // Remove end of file indicator (use of this line generates an error at the end of anonyme.log)
-    //TODO : find a better fix to EOF problem.
     is.seekg(1, ios_base::cur);
     if (is.get() != -1)
-        is.seekg(-1,ios_base::cur);
-
+        is.seekg(-1, ios_base::cur);
 
     return is;
-} // Fin operator >>
+}
 
 //------------------------------------------------------------------ PRIVE
+
 //----------------------------------------------------- Méthodes protégées
 
-bool Hit::checkRelatedToResourceFile(const string &filePath)
-//Algorithme:
-//
+void Hit::setDataQty(string &temp)
 {
-    bool related = false;
-    int dotPosition = filePath.find('.');
+    if (temp.c_str()[0] == '-')         //sometimes, field data quantity has '-' char
+    {                                   //thus it's necessary to test it manually to avoid stoi errors
+        dataQty = 0;
+    }
+    else
+    {
+        dataQty = (unsigned int) stoi(temp, nullptr, 10);
+    }
+}
+
+void Hit::setRefererInfos(string &temp)
+{
+    unsigned long argsGetpos = temp.find('?');
+    if (argsGetpos == string::npos)
+        argsGetpos = temp.find(';');
+
+    if (argsGetpos != string::npos)
+    {
+        referer = temp.substr(0, argsGetpos);
+        refererGetArgs = temp.substr(argsGetpos + 1);
+    }
+    else
+    {
+        referer = temp;
+    }
+}
+
+bool Hit::checkIfHitIsRelatedToAResourceFile(const string &filePath)
+{
+    unsigned long dotPosition = filePath.find_last_of('.');
+
     if (dotPosition != -1)
     {
-        unsigned int i;
-        string extension = filePath.substr(dotPosition+1,4);
-       for(i=0;i < EXTENSION_NUMBER && extension.compare(RESOURCE_EXTENSION_LIST[i])!=0; i++);
-       if (i < EXTENSION_NUMBER) related = true;
+       string extension = filePath.substr(dotPosition + 1);
+       for (auto &i : RESOURCE_EXTENSION_LIST)
+       {
+           if (extension != i)
+               return true;
+       }
     }
 
-    return related;
+    return false;
 }

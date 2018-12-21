@@ -11,13 +11,23 @@
 #define ArgumentParser_H
 
 //--------------------------------------------------- Interfaces utilisées
+
 #include <regex>
 
 #include "../LogReader/LogReader.h"
 #include "../Analyse/Analyse.h"
+
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
+
+enum PARSE_RESULTS {
+    GOOD,
+    FILE_NO_OVERRIDE,
+    FILE_NOT_FOUND,
+    PARSING_ERROR,
+    INVALID_VALUE,
+};
 
 //------------------------------------------------------------------------
 // Rôle de la classe <ArgumentParser>
@@ -33,13 +43,13 @@ class ArgumentParser
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    static bool Parse(string &args, Analyse &analyse);
+    static PARSE_RESULTS Parse(string &args, Analyse &analyse);
     // Mode d'emploi :
-    // Vérifie que les arguments sont bien formatté et configurer l'analyse passé en paramètre.
+    // Check if args are well formatted and setup analyse according to them.
     //
-    // args     : string    contenant les arguments de la command.
-    // analyse  : Analyse   l'analyse est configuré selon les arguments rencontré par le parser.
-    // return   : true si les arguments sont bien formattés, false sinon.
+    // args     : string    command args.
+    // analyse  : Analyse   analyse object to be configured..
+    // return   : Boolean   true if args are well formatted, else false.
     //
 
 //-------------------------------------------- Constructeurs - destructeur
@@ -52,32 +62,32 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 
-    static bool testTimeArgs(string &command, Analyse &analyse);
+    static bool testTimeArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
-    // Vérifie l'arguments de temps et configure analyse avec le contenu.
+    // Check temps args formatting and configure analyse according to it.
     //
-    // return : true si l'argument est bien formatté, false sinon.
+    // return : true if args is well formatted, false sinon.
     //
 
-    static bool testGraphArgs(string &command, Analyse &analyse);
+    static bool testGraphArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
-    // Vérifie l'arguments de génération de graph et configure analyse avec le contenu.
+    // Check graph generation args formatting and configure analyse according to it.
     //
-    // return : true si l'argument est bien formatté, false sinon.
+    // return : true if args is well formatted, false sinon.
     //
 
-    static bool testLogArgs(string &command, Analyse &analyse);
+    static bool testLogArgs(string &args, Analyse &analyse);
     // Mode d'emploi :
-    // Vérifie l'arguments de path des logs et configure analyse avec le contenu.
+    // Check log path args formatting and configure analyse according to it.
     //
-    // return : true si l'argument est bien formatté, false sinon.
+    // return : true if args is well formatted, false sinon.
     //
 
     static bool askForFileOverride();
     // Mode d'emploi :
-    // Demande à l'utilisateur si il veut ecraser un fichier.
+    // Ask user to confirm if he want to override file (with O/N)
     //
-    // return : true ou false selon la réponse.
+    // return : true or false according to user answer.
 
 //----------------------------------------------------- Attributs protégés
 

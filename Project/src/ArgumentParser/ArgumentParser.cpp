@@ -11,62 +11,63 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
+
 #include <iostream>
 #include <string>
 
 //------------------------------------------------------ Include personnel
+
 #include "ArgumentParser.h"
 
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const regex ArgumentParser::commandRegex        = regex(R"(^(( -g \S+\.dot)|( -e)|( -t [0-9]+)){0,3} \S+\.(txt|log) $)");
-const regex ArgumentParser::graphPathArgRegex   = regex("\\S+\\.dot");
-const regex ArgumentParser::timeArgRegex        = regex("-t [0-9]+");
-const regex ArgumentParser::logPathArgRegex     = regex("\\S+\\.(txt|log)");
+const regex ArgumentParser::commandRegex      = regex(R"(^(( -g \S+\.dot)|( -e)|( -t [0-9]+)){0,3} \S+\.(txt|log) $)");
+const regex ArgumentParser::graphPathArgRegex = regex("\\S+\\.dot");
+const regex ArgumentParser::timeArgRegex      = regex("-t [0-9]+");
+const regex ArgumentParser::logPathArgRegex   = regex("\\S+\\.(txt|log)");
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
 
-bool ArgumentParser::Parse(string &command, Analyse &analyse)
+PARSE_RESULTS ArgumentParser::Parse(string &args, Analyse &analyse)
 {
-    if (!regex_match(command, commandRegex))
-        return false;
+    if (!regex_match(args, commandRegex))
+        return PARSING_ERROR;
 
-    smatch match;
+    if (!testTimeArgs(args, analyse))
+        return INVALID_VALUE;
 
-    if (!testTimeArgs(command, analyse))
-        return false;
+    if (!testGraphArgs(args, analyse))
+        return FILE_NO_OVERRIDE;
 
-    if (!testGraphArgs(command, analyse))
-        return false;
-
-    if (command.find("-e") != string::npos)
-    {
+    if (args.find("-e") != string::npos)
         analyse.SetExcludeResourcesFile(true);
-    }
 
-    return testLogArgs(command, analyse);
+    if (!testLogArgs(args, analyse))
+        return FILE_NOT_FOUND;
+
+    return GOOD;
 }
 
 //------------------------------------------------------------------ PRIVE
 
 //----------------------------------------------------- Méthodes protégées
 
-bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testTimeArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, timeArgRegex))
+    if (regex_search(args, match, timeArgRegex))
     {
-        string args = match[0];
-        size_t pos = args.find(' ');
+        string arg = match[0];
+        size_t pos = arg.find(' ');
         int hour;
 
         try
         {
-            hour = stoi(args.substr(pos));
+            hour = stoi(arg.substr(pos));
         }
         catch(exception & e)
         {
@@ -85,16 +86,13 @@ bool ArgumentParser::testTimeArgs(string &command, Analyse &analyse)
     return true;
 }
 
-bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testGraphArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, graphPathArgRegex))
+    if (regex_search(args, match, graphPathArgRegex))
     {
-        string args = match[0];
-        size_t pos = args.find(' ');
-
-        string path = args.substr(pos);
+        string path = match[0];
 
         ifstream fileExistStream(path);
         if (fileExistStream.good())
@@ -103,11 +101,12 @@ bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
 
             if (askForFileOverride())
             {
-                analyse.SetGraph(command);
+                analyse.SetGraph(path);
                 return true;
             }
             else
             {
+                cout << "Analyse de log annulé, veuillez choisir un autre fichier pour le graph ou désactiver cette option.";
                 return false;
             }
         }
@@ -116,7 +115,11 @@ bool ArgumentParser::testGraphArgs(string &command, Analyse &analyse)
         if (fileCanBeCreatedStream.good())
         {
             analyse.SetGraph(path);
+            return true;
         }
+
+        cout << "Le chemin spécifié pour la création du fichier .dot n'est pas valide..." << endl;
+        return false;
     }
 
     return true;
@@ -137,11 +140,11 @@ bool ArgumentParser::askForFileOverride()
     }
 }
 
-bool ArgumentParser::testLogArgs(string &command, Analyse &analyse)
+bool ArgumentParser::testLogArgs(string &args, Analyse &analyse)
 {
     smatch match;
 
-    if (regex_search(command, match, logPathArgRegex))
+    if (regex_search(args, match, logPathArgRegex))
     {
         LogReader * logReader;
 

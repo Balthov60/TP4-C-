@@ -19,7 +19,8 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-//------------------------------------------------------------------ Types
+// Change this value according to the server where you record the logs.
+const static string SERVER_URL = "http://intranet-if.insa-lyon.fr";
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Hit>
@@ -34,72 +35,100 @@ class Hit
 public:
 //----------------------------------------------------- Méthodes publiques
 
-    const string & getIp() const {
+    const string & GetIp() const {
         return ip;
     }
 
-    const string & getLogname() const {
+    const string & GetLogname() const {
         return logname;
     }
 
-    const string & getAuthenticatedUser() const {
+    const string & GetAuthenticatedUser() const {
         return authenticatedUser;
     }
 
-    const Datetime & getDatetime() const {
+    const Datetime & GetDatetime() const {
         return datetime;
     }
 
-    const Request & getRequest() const {
+    const Request & GetRequest() const {
         return request;
     }
 
-    unsigned int getStatusCode() const {
+    unsigned int GetStatusCode() const {
         return statusCode;
     }
 
-    unsigned int getDataQty() const {
+    unsigned int GetDataQty() const {
         return dataQty;
     }
 
-    const string & getReferer() const {
-        return referer;
+    string GetReferer() const;
+
+    string GetRefererGetArgs() const {
+        return refererGetArgs;
     }
 
-    const string & getBrowserInfo() const {
+    const string & GetBrowserInfo() const {
         return browserInfo;
+    }
+
+    bool IsRelatedToResourceFile() const {
+     return relatedToResourceFile;
     }
 
 //------------------------------------------------- Surcharge d'opérateurs
 
     friend istream & operator>>(istream & is, Hit & hit);
     // Mode d'emploi :
-    // Prend un flux en entrée et remplit l'instance avec les premières informations trouvées.
+    // Fill hit instance with the first hit data found in is.
     //
     // Contrat :
-    // Le contenu du flux doit être formatté correctement.
+    // is content must be well formatted.
     //
 
 //-------------------------------------------- Constructeurs - destructeur
 
     Hit() = default;
     // Mode d'emploi :
-    // Constructeur vide
+    // Empty Constructor
     //
     // Contrat :
     //
 
     virtual ~Hit() = default;
     // Mode d'emploi :
-    // Destructeur vide
+    // Empty Destructor
     //
     // Contrat :
     //
+
 
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
+
+    void setDataQty(string &temp);
+    // Modd d'emploi:
+    // Check if temp contain DataQty else set to 0
+    //
+    // Contrat :
+    //
+
+    void setRefererInfos(string &temp);
+    // Modd d'emploi:
+    // Split URL Args from Referer.
+    //
+    // Contrat :
+    //
+
+    bool checkIfHitIsRelatedToAResourceFile(const string &filePath);
+    // Mode d'emploi:
+    // Return true if file extension exist in RESOURCE_EXTENSION_LIST
+    //
+    // Contrat :
+    //
 
 //----------------------------------------------------- Attributs protégés
     string ip;
@@ -113,7 +142,10 @@ protected:
     unsigned int dataQty;
 
     string referer;
+    string refererGetArgs;
+
     string browserInfo;
+    bool relatedToResourceFile;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Hit>

@@ -14,9 +14,7 @@
 
 #include "../GraphVizWriter/GraphVizWriter.h"
 #include "../LogReader/LogReader.h"
-#include <string>
-#include <unordered_map>
-#include <map>
+
 #include <utility>
 
 using namespace std;
@@ -24,18 +22,15 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
-struct pairhash {
-public:
-    template <typename T, typename U>
-    size_t operator()(const pair<T, U> &x) const
-    {
-        return hash<T>()(x.first) ^ hash<U>()(x.second);
-    }
-};
+
+typedef unordered_map<string, unsigned int> NodeCounter;
+typedef multimap<unsigned int, const string *> OrderedNodeCounter;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <Analyse>
 //
+// Classe principale de l'application, permet de créer les structures de données
+// utilisé pour créé un top 10 et pour créer le graph.
 //
 //------------------------------------------------------------------------
 
@@ -45,52 +40,47 @@ class Analyse
 
 public:
 //----------------------------------------------------- Méthodes publiques
+
     void Run();
     // Mode d'emploi :
+    // Run Analysis on log, generate graph if asked and display top 10.
     //
     // Contrat :
     //
-
-    void SetFile(const string & filePath)
-    {
-        file = filePath;
-    }
 
     void SetGraph(const string & graphPath)
     {
-        generateGraph = true;
-        graph = graphPath;
+        this->generateGraph = true;
+        this->graphPath = graphPath;
     }
 
-    void SetHour(int aHour)
+    void SetHour(int hour)
     {
-        hour = aHour;
+        this->hour = hour;
     }
 
-    void SetExcludeResourcesFile(bool excludeResources)
+    void SetExcludeResourcesFile(bool excludeResourcesFile)
     {
-        excludeResourcesFile = excludeResources;
+        this->excludeResourcesFile = excludeResourcesFile;
     }
 
-    void SetLogReader(LogReader * logReaderPtr)
+    void SetLogReader(LogReader * logReader)
     {
-        logReader = logReaderPtr;
+        this->logReader = logReader;
     }
-
-
-
-//------------------------------------------------- Surcharge d'opérateurs
-
 
 //-------------------------------------------- Constructeurs - destructeur
-    Analyse ();
+
+    Analyse ():hour(-1), excludeResourcesFile(false), generateGraph(false) {};
     // Mode d'emploi :
+    // default constructor
     //
     // Contrat :
     //
 
-    virtual ~Analyse ( );
+    virtual ~Analyse () = default;
     // Mode d'emploi :
+    // default destructor
     //
     // Contrat :
     //
@@ -98,44 +88,62 @@ public:
 //------------------------------------------------------------------ PRIVE
 
 protected:
+
 //----------------------------------------------------- Méthodes protégées
 
-    bool analyseNextLog();
+    bool analyseNextHit();
     // Mode d'emploi :
+    // Get next Hit and add it to NodeCounter if it match analysis parameters.
+    //
+    // Contrat :
+    //
+
+    const string * updateNodeCounterMapWithUrl(const string &url);
+    // Mode d'emploi :
+    // Add an entry or increment NodeCounter
+    //
+    // Contrat :
+    //
+    const string * getRefererStringInNodeCounterMap(const string &referer);
+    // Mode d'emploi :
+    // Get Referer String pointer from counter map or insert a new one if it don't exist.
+    //
+    // Contrat :
+    //
+
+    void updateGraphMapper(const string * referer, const string * url);
+    // Mode d'emploi :
+    // Add an entry or increment GraphMapper
     //
     // Contrat :
     //
 
     void generateOrderedNodeCounterMap();
     // Mode d'emploi :
-    //
-    // Contrat :
-    //
-
-    void generateGraphMapper();
-    // Mode d'emploi :
+    // Generate Ordered Node Counter by inverting nodeCounter Map.
     //
     // Contrat :
     //
 
     void displayResult();
     // Mode d'emploi :
+    // Display a top ten from orderedNodeCounterMap.
     //
     // Contrat :
     //
 
-
 //----------------------------------------------------- Attributs protégés
-    string file;
-    string graph;
+
+    string graphPath;
     int hour;
     bool excludeResourcesFile;
     bool generateGraph;
+
     LogReader * logReader;
 
-    unordered_map<pair<string,string>,unsigned int,pairhash> graphMapper;
-    unordered_map<string,unsigned int> nodeCounterMap;
-    multimap<unsigned int, string *> orderedNodeCounterMap;
+    GraphMapper graphMapper;
+    NodeCounter nodeCounter;
+    OrderedNodeCounter orderedNodeCounter;
 };
 
 //-------------------------------- Autres définitions dépendantes de <Analyse>

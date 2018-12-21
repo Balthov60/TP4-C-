@@ -19,10 +19,10 @@
 using namespace std;
 //------------------------------------------------------------- Constantes
 
-const char DATE_SEPARATOR = '/';
-const char TIME_SEPARATOR = ':';
-const char BASIC_SEPARATOR = ' ';
-const char END_INDICATOR = ']';
+const char DATE_SEPARATOR   = '/';
+const char TIME_SEPARATOR   = ':';
+const char BASIC_SEPARATOR  = ' ';
+const char END_INDICATOR    = ']';
 
 //----------------------------------------------------------------- PUBLIC
 

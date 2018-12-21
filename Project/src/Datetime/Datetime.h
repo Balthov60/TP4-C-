@@ -69,14 +69,14 @@ friend istream & operator>>(istream & is, Datetime & datetime);
 
     Datetime() = default;
     // Mode d'emploi :
-    // Constructeur vide
+    // Empty Constructor
     //
     // Contrat :
     //
 
     virtual ~Datetime() = default;
     // Mode d'emploi :
-    // Destructeur vide
+    // Empty Destructor
     //
     // Contrat :
     //
@@ -87,13 +87,13 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    unsigned short int day{};
-    char month[MONTH_LENGTH+1]{};
-    unsigned short int year{};
+    unsigned short int day;
+    char month[MONTH_LENGTH + 1];
+    unsigned short int year;
 
-    unsigned short int hour{};
-    unsigned short int minutes{};
-    unsigned short int seconds{};
+    unsigned short int hour;
+    unsigned short int minutes;
+    unsigned short int seconds;
 
     string utc;
 };
@@ -101,4 +101,3 @@ protected:
 //--------------------------- Autres définitions dépendantes de <Datetime>
 
 #endif // Datetime_H
-

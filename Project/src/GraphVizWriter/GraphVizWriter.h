@@ -12,13 +12,30 @@
 
 //--------------------------------------------------- Interfaces utilisées
 
-//------------------------------------------------------------- Constantes
+#include <string>
+#include <map>
+#include <unordered_map>
+
+using namespace std;
 
 //------------------------------------------------------------------ Types
+
+struct PairHash {
+public:
+    template <typename T, typename U>
+    size_t operator()(const pair<T, U> &x) const
+    {
+        return hash<T>()(x.first) ^ hash<U>()(x.second);
+    }
+};
+
+typedef unordered_map<pair<const string *, const string *>, unsigned int, PairHash> GraphMapper;
 
 //------------------------------------------------------------------------
 // Rôle de la classe <GraphVizWriter>
 //
+// Classe static permettant de créer un fichier GraphViz
+// depuis un objet de type GraphMapper
 //
 //------------------------------------------------------------------------
 
@@ -28,25 +45,18 @@ class GraphVizWriter
 
 public:
 //----------------------------------------------------- Méthodes publiques
-    // type Méthode ( liste des paramètres );
-    // Mode d'emploi :
+
+    static bool Write(unordered_map<string, unsigned int> &nodeCounterMap, GraphMapper &graphMapper, string &path);
+    // Mode d'emploi:
+    // Create file at path from nodeCounterMap & graphMapper
     //
-    // Contrat :
+    // Contrat:
+    // path must be a valid file path.
     //
 
-
-//------------------------------------------------- Surcharge d'opérateurs
-
-//-------------------------------------------- Constructeurs - destructeur
+//----------------------------------------------------------- Constructeur
 
     GraphVizWriter() = delete;
-
-//------------------------------------------------------------------ PRIVE
-
-protected:
-//----------------------------------------------------- Méthodes protégées
-
-//----------------------------------------------------- Attributs protégés
 
 };
 

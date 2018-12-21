@@ -11,24 +11,40 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
+
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 //------------------------------------------------------ Include personnel
+
 #include "GraphVizWriter.h"
 
 using namespace std;
-//------------------------------------------------------------- Constantes
 
 //----------------------------------------------------------------- PUBLIC
 
 //----------------------------------------------------- Méthodes publiques
-// type GraphVizWriter::Méthode ( liste des paramètres )
-// Algorithme :
-//
-//{
-//} //----- Fin de Méthode
 
-//------------------------------------------------------------------ PRIVE
+bool GraphVizWriter::Write(unordered_map<string, unsigned int> &nodeCounterMap, GraphMapper &graphMapper, string &path)
+{
+    ofstream stream(path);
+    if (!stream.good())
+        return false;
 
-//----------------------------------------------------- Méthodes protégées
+    stream << "digraph {" << endl;
 
+    for (auto &it : nodeCounterMap)
+    {
+        stream << "ID" << &it.first << " [label=\"" << it.first << "\"];" << endl;
+    }
+
+    for (auto &it : graphMapper)
+    {
+        stream << "ID" << it.first.first << " -> " << "ID" << it.first.second << " [label=\"" << it.second << "\"];" << endl;
+    }
+
+    stream << "}" << endl;
+
+    return true;
+}

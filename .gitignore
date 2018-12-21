@@ -4,6 +4,9 @@
 # MACOS
 **/.DS_Store
 
+# .o
+*.o
+
 # User-specific stuff
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
